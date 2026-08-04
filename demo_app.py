@@ -157,6 +157,57 @@ T: dict[str, dict[str, str]] = {
     "t3_export_ok": {"zh": "已生成去标识 RWD 汇总（演示）。所有切片满足 k≥5。",
                      "en": "De-identified RWD summary generated (demo). All slices satisfy k≥5.",
                      "ja": "非識別化RWD集計を生成しました（デモ）。全スライスが k≥5 を満たします。"},
+    # --- persona / provenance / compliance ---
+    "persona": {"zh": "🎓 刘教授的数字学者：只引用刘教授本人的病例数据，绝不臆测。",
+                "en": "🎓 Prof. Liu's Digital Scholar: cites only Prof. Liu's own case records — never speculates.",
+                "ja": "🎓 劉教授のデジタル学者：劉教授自身の症例のみを引用し、推測は一切しません。"},
+    "badge_observed": {"zh": "📎 刘教授病例中观察到", "en": "📎 observed in Prof. Liu's records",
+                       "ja": "📎 劉教授の症例で観察"},
+    "badge_ratified": {"zh": "✅ 刘教授已确认的原则", "en": "✅ Prof. Liu's ratified principle",
+                       "ja": "✅ 劉教授が承認した原則"},
+    "badge_descriptive": {"zh": "描述性 · 待确认", "en": "descriptive · awaiting ratification",
+                          "ja": "記述的 · 承認待ち"},
+    "compliance": {"zh": "⚕️ 本工具用于科普与预期沟通，不构成诊断或个体化医疗建议；结果为“相似眼的既往表现”，"
+                         "非承诺或保证。所有临床决策由医生做出。",
+                   "en": "⚕️ This tool is for education and expectation-setting — not a diagnosis or "
+                         "individual medical advice. Results show how similar eyes fared, not a promise "
+                         "or guarantee. All clinical decisions rest with the surgeon.",
+                   "ja": "⚕️ 本ツールは啓発と期待形成のためのものであり、診断や個別の医療助言ではありません。"
+                         "結果は「類似した眼の過去の経過」であり、約束・保証ではありません。臨床判断はすべて医師が行います。"},
+    # --- cohort meter / scatter ---
+    "tightness": {"zh": "相似度严格程度（越严越像本眼）", "en": "Similarity tightness (stricter = more alike)",
+                  "ja": "類似度の厳しさ（厳しいほど本眼に近い）"},
+    "meter_label": {"zh": "相似病例数", "en": "Similar cases", "ja": "類似症例数"},
+    "cohort_ok": {"zh": "在刘教授病例中找到 **{n}** 只与本眼高度相似的眼。",
+                  "en": "Found **{n}** eyes in Prof. Liu's records highly similar to this one.",
+                  "ja": "劉教授の症例に、本眼に酷似する眼が **{n}** 眼見つかりました。"},
+    "cohort_thin": {"zh": "⚠️ 刘教授病例中相似的眼过少（n={n} < {k}），不足以在此可靠陈述。请放宽相似度或调整参数。",
+                    "en": "⚠️ Too few similar eyes in Prof. Liu's records (n={n} < {k}) to speak confidently "
+                          "here. Loosen the similarity or adjust the parameters.",
+                    "ja": "⚠️ 劉教授の症例に類似する眼が少なすぎます（n={n} < {k}）。確信を持って述べられません。"
+                          "類似度を緩めるかパラメータを調整してください。"},
+    "scatter_title": {"zh": "「你在这里」：本眼在刘教授病例中的位置", "en": "\"You are here\": this eye among Prof. Liu's cases",
+                      "ja": "「あなたはここ」：劉教授の症例における本眼の位置"},
+    "scatter_you": {"zh": "本眼", "en": "This eye", "ja": "本眼"},
+    "scatter_cohort": {"zh": "相似队列", "en": "Similar cohort", "ja": "類似コホート"},
+    "scatter_other": {"zh": "其他病例", "en": "Other cases", "ja": "その他の症例"},
+    # --- vault scrubber ---
+    "scrubber_h": {"zh": "拱高与视力随时间演变（拖动时间轴）", "en": "Vault & vision over time (drag the timeline)",
+                   "ja": "ボールトと視力の経時変化（タイムラインをドラッグ）"},
+    "scrubber_tp": {"zh": "术后时间点", "en": "Post-op timepoint", "ja": "術後の時点"},
+    "vault_at": {"zh": "该时点拱高 (中位)", "en": "Vault at this point (median)", "ja": "この時点のボールト (中央値)"},
+    "va_at": {"zh": "该时点视力≥1.0 占比", "en": "Share reaching VA ≥ 1.0", "ja": "視力≥1.0 到達割合"},
+    "scrubber_note": {"zh": "分布来自上方相似队列（{n} 眼）；曲面为该时点中位拱高的模拟。",
+                      "en": "Distributions come from the similar cohort above ({n} eyes); the surface simulates "
+                            "the median vault at this timepoint.",
+                      "ja": "分布は上記の類似コホート（{n} 眼）に基づき、曲面はこの時点の中央値ボールトのシミュレーションです。"},
+    "tp_labels": {"zh": ["第1天", "第1周", "1个月", "3个月", "6个月", "1年", "2年", "3年"],
+                  "en": ["Day 1", "Week 1", "Month 1", "Month 3", "Month 6", "Year 1", "Year 2", "Year 3"],
+                  "ja": ["1日目", "1週", "1ヶ月", "3ヶ月", "6ヶ月", "1年", "2年", "3年"]},
+    "explorer_h": {"zh": "实时相似病例探索器（新）", "en": "Live similar-case explorer (new)",
+                   "ja": "リアルタイム類似症例エクスプローラー（新）"},
+    "expert_h": {"zh": "历史专家病例匹配", "en": "Historical expert case matching",
+                 "ja": "過去のエキスパート症例マッチング"},
 }
 
 def t(key: str) -> str:
@@ -202,13 +253,30 @@ def load_history(n: int = 420, seed: int = 7) -> pd.DataFrame:
         if deep[i] and upsize_roll[i]:
             chosen[i] = _step_up(ref[i])
 
-    # vault grows with (chosen - sts); noisy, clipped to a plausible range
+    # vault grows with (chosen - sts); noisy, clipped to a plausible range.
+    # Treat this as the ~Month-3 stable value; the scrubber applies a settle curve.
     vault = 300 + 430 * (chosen - sts - 0.7) + rng.normal(0, 70, n)
     vault = np.clip(vault, 130, 900).round().astype(int)
 
+    # per-case final (plateau) best-corrected decimal VA, for the vision trajectory
+    bcva_final = np.clip(rng.normal(1.08, 0.16, n), 0.6, 1.5).round(2)
+
     return pd.DataFrame({"acd": acd.round(2), "wtw": wtw.round(2), "sts": sts.round(2),
                          "sph": sph.round(2), "age": age,
-                         "ref_size": ref, "size": chosen, "vault": vault})
+                         "ref_size": ref, "size": chosen, "vault": vault,
+                         "bcva_final": bcva_final})
+
+
+# k-anonymity floor: below this many similar eyes, the agent refuses to speak
+K_ANON = 5
+
+# post-op timepoints (day offset) + settle/recovery curves applied to the cohort.
+# vault settles slightly from an early high; vision recovers over the first weeks.
+TP_DAYS = [1, 7, 30, 90, 180, 365, 730, 1095]
+VAULT_SETTLE = {1: 1.14, 7: 1.09, 30: 1.04, 90: 1.00, 180: 0.99,
+                365: 0.98, 730: 0.97, 1095: 0.96}
+VA_RECOVERY = {1: 0.60, 7: 0.84, 30: 0.96, 90: 1.00, 180: 1.00,
+               365: 1.00, 730: 0.99, 1095: 0.99}
 
 
 # ===========================================================================
@@ -223,6 +291,25 @@ def _feature_stats(df: pd.DataFrame):
     means = df[KNN_FEATURES].mean().values
     stds = df[KNN_FEATURES].std(ddof=0).replace(0, 1).values
     return means, stds
+
+def _z(df, means, stds):
+    return (df[KNN_FEATURES].values - means) / stds
+
+def weighted_distances(df: pd.DataFrame, query: dict) -> np.ndarray:
+    means, stds = _feature_stats(df)
+    qz = (np.array([query[f] for f in KNN_FEATURES], dtype=float) - means) / stds
+    fz = _z(df, means, stds)
+    return np.sqrt(((fz - qz) ** 2 * KNN_WEIGHTS).sum(axis=1))
+
+def cohort_within(df: pd.DataFrame, query: dict, radius: float):
+    """Radius-based 'similar' cohort. Returns (cohort_df, distance_array, mask).
+    The cohort SHRINKS as the user tightens the radius or picks rare parameters —
+    which is what lets the live meter honestly drop below the k-anonymity floor."""
+    dist = weighted_distances(df, query)
+    mask = dist <= radius
+    out = df.copy()
+    out["distance"] = dist
+    return out[mask].sort_values("distance"), dist, mask
 
 def match_cases(df: pd.DataFrame, query: dict, k: int = 25) -> pd.DataFrame:
     means, stds = _feature_stats(df)
@@ -321,8 +408,56 @@ def research_topics(df: pd.DataFrame) -> list[str]:
 
 
 # ===========================================================================
-# 6. App layout
+# 5b. "You are here" scatter, timepoint cohort stats, provenance badges
 # ===========================================================================
+SIZE_COLORS = {12.1: "#a8dadc", 12.6: "#457b9d", 13.2: "#2a9d8f", 13.7: "#e76f51"}
+
+def cohort_scatter(df: pd.DataFrame, query: dict, mask: np.ndarray) -> go.Figure:
+    """STS (x) vs ACD (y) — the sizing space. Other cases grey, cohort colored by
+    chosen size, the patient's eye a gold star."""
+    fig = go.Figure()
+    other = df[~mask]
+    fig.add_scatter(x=other["sts"], y=other["acd"], mode="markers",
+                    marker=dict(size=6, color="#d9d9d9"), name=t("scatter_other"),
+                    hoverinfo="skip")
+    coh = df[mask]
+    fig.add_scatter(
+        x=coh["sts"], y=coh["acd"], mode="markers",
+        marker=dict(size=9, color=[SIZE_COLORS.get(s, "#555") for s in coh["size"]],
+                    line=dict(width=0.5, color="white")),
+        name=t("scatter_cohort"),
+        text=[f"{s} mm · vault {v}µm" for s, v in zip(coh["size"], coh["vault"])],
+        hovertemplate="STS %{x:.2f} · ACD %{y:.2f}<br>%{text}<extra></extra>")
+    fig.add_scatter(x=[query["sts"]], y=[query["acd"]], mode="markers",
+                    marker=dict(size=22, color="gold", symbol="star",
+                                line=dict(width=1.5, color="#333")),
+                    name=t("scatter_you"), hovertemplate=t("scatter_you") + "<extra></extra>")
+    fig.update_layout(height=380, margin=dict(l=0, r=0, t=10, b=0),
+                      xaxis_title="STS (mm)", yaxis_title="ACD (mm)",
+                      legend=dict(orientation="h", y=1.08))
+    return fig
+
+def timepoint_stats(cohort: pd.DataFrame, day: int) -> dict:
+    """Apply the settle/recovery curves to the cohort at a given post-op day."""
+    vault = cohort["vault"].values * VAULT_SETTLE[day]
+    va = cohort["bcva_final"].values * VA_RECOVERY[day]
+    return {
+        "vault_median": int(np.median(vault)),
+        "vault_p25": int(np.percentile(vault, 25)),
+        "vault_p75": int(np.percentile(vault, 75)),
+        "vault_dist": vault,
+        "va_dist": va,
+        "va_share_10": float(np.mean(va >= 1.0)),
+    }
+
+def badge(kind: str, n: int | None = None) -> str:
+    """Provenance tag for the Scholar persona. kind = 'observed' | 'ratified'."""
+    label = t("badge_observed") if kind == "observed" else t("badge_ratified")
+    tail = f" · n={n}" if n is not None else ""
+    return f"`{label}{tail}`"
+
+
+
 def main() -> None:
     st.set_page_config(page_title="Liu's Digital Brain", page_icon="🧠", layout="wide")
 
@@ -348,15 +483,83 @@ def main() -> None:
     # ---------------- Tab 1: Patient Trust & Education ----------------
     with tab1:
         st.subheader(t("t1_head"))
+        st.markdown(t("persona"))
         st.write(t("t1_intro"))
         c = st.columns(5)
-        q = {
+        q = {   # shared inputs — feed BOTH the new live explorer and the original flow
             "acd": c[0].number_input(t("acd"), 2.6, 4.2, 3.40, 0.01),
             "wtw": c[1].number_input(t("wtw"), 10.5, 13.0, 11.80, 0.01),
             "sts": c[2].number_input(t("sts"), 10.5, 13.5, 12.05, 0.01),
             "sph": c[3].number_input(t("sph"), -20.0, -2.0, -9.00, 0.25),
             "age": c[4].number_input(t("age"), 18, 55, 30, 1),
         }
+
+        # ============================================================
+        # NEW (additive): live similar-case explorer + honesty meter + scrubber
+        # ============================================================
+        st.markdown("### " + t("explorer_h"))
+        tight = st.slider(t("tightness"), 1, 10, 5)
+        radius = 0.35 + (10 - tight) * 0.22          # tight=10 -> 0.35, tight=1 -> 2.33
+        cohort, dist, mask = cohort_within(df, q, radius)
+        n = len(cohort)
+
+        # --- LIVE cohort-size meter + k-anonymity honesty gate ---
+        meter, msg = st.columns([1, 4])
+        meter.metric(t("meter_label"), f"n = {n}")
+        if n < K_ANON:
+            # honest refusal — the designed moment that proves we don't fabricate
+            msg.error(t("cohort_thin").format(n=n, k=K_ANON))
+            st.plotly_chart(cohort_scatter(df, q, mask), use_container_width=True)
+            st.caption(t("scatter_title"))
+        else:
+            msg.success(t("cohort_ok").format(n=n))
+            modal_size = cohort["size"].mode().iloc[0]
+
+            left, right = st.columns([3, 2])
+            with left:
+                st.markdown("#### " + t("scatter_title"))
+                st.plotly_chart(cohort_scatter(df, q, mask), use_container_width=True)
+            with right:
+                st.markdown("#### " + t("t1_cohort"))
+                st.metric(t("t1_common_size"), f"{modal_size} mm")
+                st.markdown(badge("observed", n))
+                st.info(t("t1_insight_txt").format(
+                    n=n, size=modal_size, v=timepoint_stats(cohort, 90)["vault_median"]))
+
+            # --- Longitudinal vault + vision scrubber ---
+            st.markdown("---")
+            st.markdown("#### " + t("scrubber_h"))
+            labels = t("tp_labels")
+            sel = st.select_slider(t("scrubber_tp"), options=list(range(len(TP_DAYS))),
+                                   value=3, format_func=lambda i: labels[i])
+            day = TP_DAYS[sel]
+            s = timepoint_stats(cohort, day)
+
+            sc = st.columns(3)
+            sc[0].metric(t("vault_at"), f"{s['vault_median']} µm")
+            sc[1].metric(t("t1_vault_range"), f"{s['vault_p25']}–{s['vault_p75']} µm")
+            sc[2].metric(t("va_at"), f"{s['va_share_10']*100:.0f}%")
+            st.markdown(badge("observed", n))
+
+            gl, gr = st.columns([3, 2])
+            with gl:
+                st.plotly_chart(vault_preview(s["vault_median"]), use_container_width=True)
+                st.caption(t("scrubber_note").format(n=n))
+            with gr:
+                dist_fig = go.Figure(go.Histogram(x=s["vault_dist"], nbinsx=18,
+                                                  marker_color="#2a9d8f"))
+                dist_fig.update_layout(height=260, margin=dict(l=0, r=0, t=10, b=0),
+                                       xaxis_title="vault µm", yaxis_title="")
+                st.plotly_chart(dist_fig, use_container_width=True)
+                show = cohort[["acd", "wtw", "sts", "sph", "size", "vault"]].head(15).reset_index()
+                show.columns = t("t1_table_cols")
+                st.dataframe(show, use_container_width=True, hide_index=True, height=220)
+
+        # ============================================================
+        # ORIGINAL (unchanged): historical expert case matching (button flow)
+        # ============================================================
+        st.markdown("---")
+        st.markdown("### " + t("expert_h"))
         if st.button(t("match_btn"), type="primary"):
             hits = match_cases(df, q, k=25)
             pred_vault = int(hits["vault"].median())
@@ -382,6 +585,8 @@ def main() -> None:
                 show.columns = t("t1_table_cols")
                 st.dataframe(show, use_container_width=True, hide_index=True, height=280)
 
+        st.caption(t("compliance"))
+
     # ---------------- Tab 2: Academic & Clinical Intelligence ----------------
     with tab2:
         st.subheader(t("t2_head"))
@@ -401,6 +606,7 @@ def main() -> None:
         st.dataframe(disp, use_container_width=True, hide_index=True)
 
         deep_n = int((df["acd"] >= 3.3).sum())
+        st.markdown(badge("observed", deep_n) + "  ·  " + f"*{t('badge_descriptive')}*")
         st.success(t("t2_nomo_insight").format(n=deep_n))
         st.caption("🔒 " + t("t2_await"))
 
