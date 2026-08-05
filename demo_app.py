@@ -244,6 +244,32 @@ T: dict[str, dict[str, str]] = {
     "live_badge": {"zh": "● 实时", "en": "● LIVE", "ja": "● ライブ"},
     "kanon_ok_badge": {"zh": "✓ k-匿名已校验", "en": "✓ k-anonymity verified", "ja": "✓ k-匿名性 検証済"},
     "kanon_bad_badge": {"zh": "✕ 低于 k 阈值", "en": "✕ below k-threshold", "ja": "✕ k閾値未満"},
+    # --- vault preview labels / views / risk simulation ---
+    "lbl_lens": {"zh": "晶状体", "en": "Crystalline lens", "ja": "水晶体"},
+    "lbl_vault": {"zh": "拱高间隙", "en": "Vault gap", "ja": "ボールト間隙"},
+    "lbl_cornea": {"zh": "角膜", "en": "Cornea", "ja": "角膜"},
+    "lbl_pupil": {"zh": "瞳孔", "en": "Pupil", "ja": "瞳孔"},
+    "view_mode": {"zh": "视角", "en": "View", "ja": "視点"},
+    "view_3d": {"zh": "🧊 立体图", "en": "🧊 3D", "ja": "🧊 3D"},
+    "view_2d": {"zh": "📐 侧视图 + 俯视图", "en": "📐 Side + Top", "ja": "📐 側面＋俯瞰"},
+    "view_side": {"zh": "侧视图（剖面）", "en": "Side view (profile)", "ja": "側面図（断面）"},
+    "view_top": {"zh": "俯视图（俯瞰）", "en": "Top view (overhead)", "ja": "俯瞰図"},
+    "zone_low": {"zh": "偏低", "en": "Low", "ja": "低い"},
+    "zone_ideal": {"zh": "理想", "en": "Ideal", "ja": "理想"},
+    "zone_monitor": {"zh": "偏高", "en": "High-ish", "ja": "やや高い"},
+    "zone_high": {"zh": "过高", "en": "Too high", "ja": "高すぎ"},
+    "risk_low": {"zh": "拱高偏低（<250µm）：ICL 可能接触自身晶状体，存在白内障风险。",
+                 "en": "Vault low (<250 µm): the ICL may contact your natural lens — a cataract risk.",
+                 "ja": "ボールトが低い（<250µm）：ICLが水晶体に接触する可能性があり、白内障リスク。"},
+    "risk_ideal": {"zh": "拱高理想（250–750µm）：间隙充足，房水循环稳定，最安全。",
+                   "en": "Ideal vault (250–750 µm): ample clearance and stable fluid flow — the safest range.",
+                   "ja": "理想的なボールト（250–750µm）：十分なクリアランスと安定した房水循環で最も安全。"},
+    "risk_monitor": {"zh": "拱高偏高（750–1000µm）：通常可接受，但建议随访观察。",
+                     "en": "Vault a bit high (750–1000 µm): usually acceptable, but worth monitoring.",
+                     "ja": "ボールトがやや高い（750–1000µm）：通常許容範囲ですが経過観察を推奨。"},
+    "risk_high": {"zh": "拱高过高（>1000µm）：可能引起房角变窄或眼压升高。",
+                  "en": "Vault too high (>1000 µm): may narrow the drainage angle or raise eye pressure.",
+                  "ja": "ボールトが高すぎる（>1000µm）：隅角の狭小化や眼圧上昇のリスク。"},
 }
 
 def t(key: str) -> str:
@@ -388,27 +414,148 @@ def build_nomogram(df: pd.DataFrame) -> pd.DataFrame:
 # ===========================================================================
 # 4. 3D vault preview (schematic — ICL posterior surface over crystalline lens)
 # ===========================================================================
+VAULT_ZONES = [(0, 250, "#e76f51", "low"), (250, 750, "#2a9d8f", "ideal"),
+               (750, 1000, "#e9c46a", "monitor"), (1000, 1300, "#e63946", "high")]
+
+def hex_rgba(h: str, a: float) -> str:
+    h = h.lstrip("#")
+    return f"rgba({int(h[0:2],16)},{int(h[2:4],16)},{int(h[4:6],16)},{a})"
+
+def vault_zone(v: float) -> dict:
+    """Classify a vault height into a surgical-quality/risk band."""
+    if v < 250:
+        k, color, bg, icon = "low", "#e76f51", "#fde8e2", "⚠️"
+    elif v <= 750:
+        k, color, bg, icon = "ideal", "#2a9d8f", "#e6f4f1", "✅"
+    elif v <= 1000:
+        k, color, bg, icon = "monitor", "#e9c46a", "#fcf3d9", "🟡"
+    else:
+        k, color, bg, icon = "high", "#e63946", "#fde0e3", "⛔"
+    return {"key": k, "color": color, "bg": bg, "icon": icon, "msg": t("risk_" + k)}
+
 def vault_preview(vault_um: float) -> go.Figure:
-    vault_mm = vault_um / 1000.0
+    """Labeled 3D: crystalline lens dome (lower) + ICL surface (upper) + the
+    vault gap called out explicitly. Kept name so existing callers still work."""
+    vmm = vault_um / 1000.0
+    z = vault_zone(vault_um)
     g = np.linspace(-3, 3, 40)
     X, Y = np.meshgrid(g, g)
     R2 = X ** 2 + Y ** 2
     mask = R2 <= 9
     lens = np.where(mask, -0.16 * R2, np.nan)              # crystalline lens anterior dome
-    icl = np.where(mask, -0.16 * R2 + vault_mm, np.nan)    # ICL posterior surface, vault above
+    icl = np.where(mask, -0.16 * R2 + vmm, np.nan)         # ICL posterior surface, vault above
     fig = go.Figure()
-    fig.add_surface(x=X, y=Y, z=lens, showscale=False, opacity=0.9,
-                    colorscale="Blues", name="Crystalline lens")
-    fig.add_surface(x=X, y=Y, z=icl, showscale=False, opacity=0.6,
-                    colorscale="Teal", name="ICL")
-    fig.update_layout(
-        height=420, margin=dict(l=0, r=0, t=30, b=0),
-        uirevision="vault",                       # keep the user's camera across scrub updates
-        transition=dict(duration=400, easing="cubic-in-out"),
-        scene=dict(xaxis_title="mm", yaxis_title="mm", zaxis_title="mm",
-                   aspectmode="manual", aspectratio=dict(x=1, y=1, z=0.6)),
-        title=f"Vault ≈ {int(vault_um)} µm")
+    fig.add_surface(x=X, y=Y, z=lens, showscale=False, opacity=0.9, colorscale="Blues")
+    fig.add_surface(x=X, y=Y, z=icl, showscale=False, opacity=0.6, colorscale="Teal")
+    # explicit gap indicator at centre + floating labels for ICL / lens / vault
+    fig.add_scatter3d(x=[0, 0], y=[0, 0], z=[0, vmm], mode="lines",
+                      line=dict(color=z["color"], width=8), hoverinfo="skip")
+    fig.add_scatter3d(x=[0, 0, 0], y=[3.0, 3.0, 0.0], z=[vmm + 0.35, -0.35, vmm / 2],
+                      mode="text", hoverinfo="skip",
+                      text=["ICL", t("lbl_lens"), f"{t('lbl_vault')} {int(vault_um)}µm"],
+                      textfont=dict(size=13, color=["#0b7285", "#1d3557", z["color"]]))
+    fig.update_layout(height=430, margin=dict(l=0, r=0, t=30, b=0), uirevision="vault",
+                      showlegend=False, transition=dict(duration=400, easing="cubic-in-out"),
+                      scene=dict(xaxis_title="mm", yaxis_title="mm", zaxis_title="mm",
+                                 aspectmode="manual", aspectratio=dict(x=1, y=1, z=0.6)),
+                      title=f"Vault ≈ {int(vault_um)} µm")
     return fig
+
+def vault_view_side(vault_um: float) -> go.Figure:
+    """Side / profile cross-section (侧视图) — the clearest place for labels."""
+    vmm = vault_um / 1000.0
+    z = vault_zone(vault_um)
+    x = np.linspace(-3, 3, 121)
+    lens_y = -0.16 * x ** 2
+    icl_y = lens_y + vmm
+    cornea_y = 1.15 - 0.05 * x ** 2
+    fig = go.Figure()
+    fig.add_scatter(x=x, y=cornea_y, mode="lines", line=dict(color="#cfd8dc", width=3),
+                    hoverinfo="skip")
+    fig.add_scatter(x=x, y=icl_y, mode="lines", line=dict(color="#0b7285", width=3),
+                    hoverinfo="skip")
+    fig.add_scatter(x=x, y=lens_y, mode="lines", line=dict(color="#1d3557", width=3),
+                    fill="tonexty", fillcolor=hex_rgba(z["color"], 0.28), hoverinfo="skip")
+    fig.add_shape(type="line", x0=0, x1=0, y0=0, y1=vmm,
+                  line=dict(color=z["color"], width=2, dash="dot"))
+    fig.add_annotation(x=0, y=vmm / 2, text=f"{t('lbl_vault')}<br>{int(vault_um)} µm",
+                       showarrow=False, font=dict(size=12, color=z["color"]),
+                       bgcolor="rgba(255,255,255,.75)")
+    fig.add_annotation(x=-2.0, y=icl_y[20] + 0.18, text="ICL", showarrow=True, arrowhead=2,
+                       ax=-28, ay=-22, font=dict(size=13, color="#0b7285"))
+    fig.add_annotation(x=2.0, y=lens_y[100] - 0.18, text=t("lbl_lens"), showarrow=True,
+                       arrowhead=2, ax=28, ay=24, font=dict(size=13, color="#1d3557"))
+    fig.add_annotation(x=0, y=cornea_y[60] + 0.12, text=t("lbl_cornea"), showarrow=False,
+                       font=dict(size=11, color="#90a4ae"))
+    fig.update_layout(height=340, margin=dict(l=0, r=0, t=10, b=0), showlegend=False,
+                      transition=dict(duration=300),
+                      xaxis=dict(visible=False, range=[-3.2, 3.2]),
+                      yaxis=dict(visible=False, scaleanchor="x", scaleratio=1))
+    return fig
+
+def vault_view_top(vault_um: float) -> go.Figure:
+    """Top / overhead view (俯视图) — the ICL centred over the pupil."""
+    z = vault_zone(vault_um)
+    th = np.linspace(0, 2 * np.pi, 120)
+
+    def circ(r):
+        return r * np.cos(th), r * np.sin(th)
+
+    fig = go.Figure()
+    xo, yo = circ(5.8)
+    fig.add_scatter(x=xo, y=yo, mode="lines", fill="toself", fillcolor="#eceff1",
+                    line=dict(color="#cfd8dc"), hoverinfo="skip")
+    xi, yi = circ(3.0)
+    fig.add_scatter(x=xi, y=yi, mode="lines", fill="toself",
+                    fillcolor=hex_rgba(z["color"], 0.22), line=dict(color=z["color"], width=2),
+                    hoverinfo="skip")
+    xp, yp = circ(1.6)
+    fig.add_scatter(x=xp, y=yp, mode="lines", fill="toself", fillcolor="#37474f",
+                    line=dict(color="#263238"), hoverinfo="skip")
+    fig.add_annotation(x=0, y=3.3, text="ICL", showarrow=False, font=dict(size=12, color=z["color"]))
+    fig.add_annotation(x=0, y=0, text=t("lbl_pupil"), showarrow=False,
+                       font=dict(size=11, color="white"))
+    fig.update_layout(height=340, margin=dict(l=0, r=0, t=10, b=0), showlegend=False,
+                      xaxis=dict(visible=False, range=[-6.2, 6.2]),
+                      yaxis=dict(visible=False, scaleanchor="x", scaleratio=1))
+    return fig
+
+def vault_risk_bar(vault_um: float) -> go.Figure:
+    """Horizontal risk-zone gauge with a live marker at the current vault."""
+    fig = go.Figure()
+    for lo, hi, color, key in VAULT_ZONES:
+        fig.add_shape(type="rect", x0=lo, x1=hi, y0=0, y1=1,
+                      fillcolor=hex_rgba(color, 0.55), line_width=0)
+        fig.add_annotation(x=(lo + min(hi, 1300)) / 2, y=0.5, text=t("zone_" + key),
+                           showarrow=False, font=dict(size=11, color="#333"))
+    v = min(vault_um, 1290)
+    fig.add_shape(type="line", x0=v, x1=v, y0=-0.15, y1=1.15, line=dict(color="#111", width=3))
+    fig.add_annotation(x=v, y=1.35, text=f"{int(vault_um)} µm", showarrow=False,
+                       font=dict(size=13, color="#111"))
+    fig.update_layout(height=120, margin=dict(l=6, r=6, t=26, b=26),
+                      transition=dict(duration=300),
+                      xaxis=dict(range=[0, 1300], title="µm", tickvals=[250, 750, 1000]),
+                      yaxis=dict(visible=False, range=[-0.2, 1.45]))
+    return fig
+
+def render_vault_preview(vault_um: float) -> None:
+    """UI: risk banner + zone gauge + view toggle (3D | side+top)."""
+    z = vault_zone(vault_um)
+    st.markdown(
+        f"<div style='background:{z['bg']};border-left:6px solid {z['color']};"
+        f"padding:10px 14px;border-radius:8px;animation:fadein .4s ease'>"
+        f"{z['icon']} <b>{int(vault_um)} µm</b> — {z['msg']}</div>", unsafe_allow_html=True)
+    st.plotly_chart(vault_risk_bar(vault_um), use_container_width=True)
+    view = st.radio(t("view_mode"), [t("view_3d"), t("view_2d")], horizontal=True,
+                    key="vault_view")
+    if view == t("view_3d"):
+        st.plotly_chart(vault_preview(vault_um), use_container_width=True)
+    else:
+        a, b = st.columns(2)
+        a.markdown("**" + t("view_side") + "**")
+        a.plotly_chart(vault_view_side(vault_um), use_container_width=True)
+        b.markdown("**" + t("view_top") + "**")
+        b.plotly_chart(vault_view_top(vault_um), use_container_width=True)
 
 
 # ===========================================================================
@@ -783,19 +930,21 @@ def main() -> None:
             sc[2].metric(t("va_at"), f"{s['va_share_10']*100:.0f}%")
             st.markdown(badge("observed", n))
 
-            gl, gr = st.columns([3, 2])
-            with gl:
-                st.plotly_chart(vault_preview(s["vault_median"]), use_container_width=True)
-                st.caption(t("scrubber_note").format(n=n))
-            with gr:
+            # enhanced vault visualisation: risk banner + zone gauge + 3D/side/top
+            render_vault_preview(s["vault_median"])
+            st.caption(t("scrubber_note").format(n=n))
+
+            gr1, gr2 = st.columns(2)
+            with gr1:
                 dist_fig = go.Figure(go.Histogram(x=s["vault_dist"], nbinsx=18,
                                                   marker_color="#2a9d8f"))
                 dist_fig.update_layout(height=260, margin=dict(l=0, r=0, t=10, b=0),
                                        xaxis_title="vault µm", yaxis_title="")
                 st.plotly_chart(dist_fig, use_container_width=True)
+            with gr2:
                 show = cohort[["acd", "wtw", "sts", "sph", "size", "vault"]].head(15).reset_index()
                 show.columns = t("t1_table_cols")
-                st.dataframe(show, use_container_width=True, hide_index=True, height=220)
+                st.dataframe(show, use_container_width=True, hide_index=True, height=260)
 
         # ============================================================
         # NEW (additive): manual vs. AI-assisted comparison (uses live n)
