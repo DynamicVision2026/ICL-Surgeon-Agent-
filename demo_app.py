@@ -208,6 +208,42 @@ T: dict[str, dict[str, str]] = {
                    "ja": "リアルタイム類似症例エクスプローラー（新）"},
     "expert_h": {"zh": "历史专家病例匹配", "en": "Historical expert case matching",
                  "ja": "過去のエキスパート症例マッチング"},
+    "plain_label": {"zh": "通俗解释：", "en": "In plain terms:", "ja": "かんたんに言うと："},
+    "why_label": {"zh": "为何重要：", "en": "Why it matters:", "ja": "なぜ重要："},
+    "understand_terms": {"zh": "👉 点此了解这些专业术语（通俗解释 + 刘教授真实数据）",
+                         "en": "👉 Tap to understand these clinical terms (plain language + Prof. Liu's real data)",
+                         "ja": "👉 これらの専門用語をやさしく理解する（劉教授の実データつき）"},
+    "cmp_h": {"zh": "人工经验 vs. AI 辅助：同一只眼，两种沟通方式",
+              "en": "Manual experience vs. AI-assisted: one eye, two ways to communicate",
+              "ja": "手動の経験 vs. AI支援：同じ眼、2つの伝え方"},
+    "cmp_manual_title": {"zh": "🧑‍⚕️ 传统人工方式", "en": "🧑‍⚕️ Traditional manual approach",
+                         "ja": "🧑‍⚕️ 従来の手動アプローチ"},
+    "cmp_ai_title": {"zh": "🤖 AI 辅助队列探索", "en": "🤖 AI-assisted cohort exploration",
+                     "ja": "🤖 AI支援コホート探索"},
+    "cmp_manual_pts": {
+        "zh": ["凭记忆回忆“几例”相似病例", "主观印象，无精确数量", "满口专业术语，患者难懂",
+               "无隐私核验流程", "预期基于医生印象"],
+        "en": ["Recalls 'a few' similar cases from memory", "Subjective impression, no exact count",
+               "Heavy jargon, hard for patients", "No privacy-verification step",
+               "Expectations set by impression"],
+        "ja": ["記憶から「数例」を想起", "主観的印象、正確な数なし", "専門用語が多く患者に難解",
+               "プライバシー検証なし", "期待は印象に基づく"]},
+    "cmp_ai_pts": {
+        "zh": ["从刘教授 {N} 例中客观检索", "精确相似队列 n={n}，可复现", "术语即时转为通俗语言",
+               "k≥{k} 隐私校验实时通过", "预期基于真实结果分布"],
+        "en": ["Objective search across Prof. Liu's {N} eyes", "Exact cohort n={n}, reproducible",
+               "Terms auto-translated to plain language", "k≥{k} privacy check verified live",
+               "Expectations from real outcome distribution"],
+        "ja": ["劉教授の {N} 眼から客観的に検索", "正確なコホート n={n}、再現可能",
+               "用語を即座にやさしく変換", "k≥{k} プライバシー検証を即時通過",
+               "期待は実際の結果分布に基づく"]},
+    "cmp_anchor": {"zh": "同一只眼：人工凭印象 → 本系统从刘教授 {N} 例中客观检索出 n={n} 例相似眼，并通过 k≥{k} 隐私校验。",
+                   "en": "Same eye: manual impression → this system objectively retrieves n={n} similar eyes "
+                         "from Prof. Liu's {N}, k≥{k} privacy-verified.",
+                   "ja": "同じ眼：手動の印象 → 本システムは劉教授の {N} 眼から n={n} 眼を客観的に抽出し、k≥{k} で検証。"},
+    "live_badge": {"zh": "● 实时", "en": "● LIVE", "ja": "● ライブ"},
+    "kanon_ok_badge": {"zh": "✓ k-匿名已校验", "en": "✓ k-anonymity verified", "ja": "✓ k-匿名性 検証済"},
+    "kanon_bad_badge": {"zh": "✕ 低于 k 阈值", "en": "✕ below k-threshold", "ja": "✕ k閾値未満"},
 }
 
 def t(key: str) -> str:
@@ -367,6 +403,8 @@ def vault_preview(vault_um: float) -> go.Figure:
                     colorscale="Teal", name="ICL")
     fig.update_layout(
         height=420, margin=dict(l=0, r=0, t=30, b=0),
+        uirevision="vault",                       # keep the user's camera across scrub updates
+        transition=dict(duration=400, easing="cubic-in-out"),
         scene=dict(xaxis_title="mm", yaxis_title="mm", zaxis_title="mm",
                    aspectmode="manual", aspectratio=dict(x=1, y=1, z=0.6)),
         title=f"Vault ≈ {int(vault_um)} µm")
@@ -458,8 +496,202 @@ def badge(kind: str, n: int | None = None) -> str:
 
 
 
+# ===========================================================================
+# 5c. Plain-language glossary + animated manual-vs-AI comparison (additive)
+# ===========================================================================
+CSS = """
+<style>
+@keyframes pulse {0%{opacity:1}50%{opacity:.4}100%{opacity:1}}
+@keyframes fadein {from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes shimmer {0%{background-position:-220px 0}100%{background-position:220px 0}}
+.pulse-badge{display:inline-block;padding:3px 12px;border-radius:12px;font-size:.82rem;
+  font-weight:700;animation:pulse 1.6s ease-in-out infinite}
+.badge-ok{background:#d8f3dc;color:#1b4332}
+.badge-warn{background:#ffd6d6;color:#7f1d1d}
+.scanbar{height:4px;border-radius:2px;margin:6px 0 2px;background:linear-gradient(90deg,
+  rgba(42,157,143,.15),#2a9d8f,rgba(42,157,143,.15));background-size:220px 100%;
+  animation:shimmer 1.4s linear infinite}
+.cmp-card{border-radius:14px;padding:14px 18px;animation:fadein .5s ease;height:100%}
+.cmp-manual{background:#f4f4f5;border:1px solid #e4e4e7}
+.cmp-ai{background:linear-gradient(135deg,#e7f5f1,#eef6ff);border:1px solid #b7e4d3}
+.cmp-card h4{margin:.1rem 0 .5rem}
+.cmp-card ul{margin:.2rem 0 0 1.1rem;padding:0;line-height:1.7}
+.term-card{background:#fbfbfd;border:1px solid #ececf1;border-radius:12px;padding:12px 14px;
+  margin-bottom:10px;animation:fadein .4s ease}
+.term-name{font-weight:700;margin-bottom:4px;color:#264653}
+.term-data{margin-top:6px;font-size:.86rem;color:#2a9d8f}
+</style>
+"""
+
+# term -> plain-language meaning + why it matters, per language. Data anchors
+# (real cohort numbers) are computed separately in data_anchor().
+GLOSSARY: dict[str, dict[str, dict[str, str]]] = {
+    "acd": {
+        "zh": {"name": "前房深度 (ACD)", "plain": "眼球角膜和自身晶状体之间那段空间的深度。",
+               "why": "空间越充裕，植入的镜片越有余地，术后越安全。"},
+        "en": {"name": "Anterior chamber depth (ACD)",
+               "plain": "How deep the space is between the cornea and your natural lens.",
+               "why": "More room means the implanted lens sits more safely."},
+        "ja": {"name": "前房深度 (ACD)", "plain": "角膜と水晶体の間の空間の深さです。",
+               "why": "空間が広いほど、レンズを安全に留置できます。"}},
+    "wtw": {
+        "zh": {"name": "角膜横径 / 白到白 (WTW)", "plain": "角膜的水平宽度，用来估计眼睛内部大小。",
+               "why": "帮助挑选合适的镜片尺寸，避免过大或过小。"},
+        "en": {"name": "White-to-white (WTW)",
+               "plain": "The horizontal width of the cornea — a proxy for eye size.",
+               "why": "Helps pick a lens size that isn't too big or too small."},
+        "ja": {"name": "角膜横径 (WTW)", "plain": "角膜の横幅で、眼の内部の大きさの目安です。",
+               "why": "適切なレンズサイズ選びに役立ちます。"}},
+    "sts": {
+        "zh": {"name": "沟到沟 (STS)", "plain": "眼内固定镜片的两个位置之间的距离。",
+               "why": "选尺寸最关键的测量，直接影响拱高是否理想。"},
+        "en": {"name": "Sulcus-to-sulcus (STS)",
+               "plain": "The distance between the two spots inside the eye that hold the lens.",
+               "why": "The most important measurement for sizing — it drives the vault."},
+        "ja": {"name": "毛様溝間距離 (STS)", "plain": "眼内でレンズを支える2点間の距離です。",
+               "why": "サイズ選定で最重要。ボールトを左右します。"}},
+    "sph": {
+        "zh": {"name": "球镜度数 (SPH)", "plain": "近视的度数，负数越大表示近视越深。",
+               "why": "决定需要多强的矫正，影响镜片度数。"},
+        "en": {"name": "Sphere (SPH)",
+               "plain": "Your degree of short-sight — a bigger negative number means stronger myopia.",
+               "why": "Determines how much correction the lens must provide."},
+        "ja": {"name": "球面度数 (SPH)", "plain": "近視の度数で、マイナスが大きいほど強い近視です。",
+               "why": "必要な矯正量、つまりレンズ度数を決めます。"}},
+    "vault": {
+        "zh": {"name": "拱高 (Vault)", "plain": "植入的 ICL 与你自身晶状体之间留出的小间隙。",
+               "why": "太高可能升高眼压，太低可能接触晶状体；落在理想区间最安全。"},
+        "en": {"name": "Vault",
+               "plain": "The tiny gap left between the implanted ICL and your natural lens.",
+               "why": "Too high can raise eye pressure, too low can touch the lens — the middle is safest."},
+        "ja": {"name": "ボールト (Vault)", "plain": "留置した ICL と自分の水晶体との間の小さな隙間です。",
+               "why": "高すぎると眼圧上昇、低すぎると水晶体に接触。適正域が最も安全です。"}},
+    "va": {
+        "zh": {"name": "视力 (VA)", "plain": "看视力表能看清的程度，1.0 约等于标准视力。",
+               "why": "衡量手术效果最直观的指标。"},
+        "en": {"name": "Visual acuity (VA)",
+               "plain": "How clearly you read the eye chart — 1.0 is roughly standard vision.",
+               "why": "The most direct measure of how well surgery worked."},
+        "ja": {"name": "視力 (VA)", "plain": "視力表をどれだけ見えるか。1.0 が標準的な視力です。",
+               "why": "手術効果を最も直接的に示す指標です。"}},
+    "lens_size": {
+        "zh": {"name": "镜片尺寸 (ICL Size)", "plain": "植入镜片的整体直径，需与你的眼睛尺寸匹配。",
+               "why": "尺寸合适才能把拱高保持在安全范围：太大拱高过高，太小拱高过低。"},
+        "en": {"name": "Lens size (ICL size)",
+               "plain": "The overall diameter of the implanted lens, matched to your eye.",
+               "why": "The right size keeps the vault safe — too big pushes it too high, too small too low."},
+        "ja": {"name": "レンズサイズ (ICL Size)", "plain": "留置するレンズの全体径で、眼の大きさに合わせます。",
+               "why": "適切なサイズがボールトを安全域に保ちます。大きすぎると高く、小さすぎると低くなります。"}},
+    "cohort": {
+        "zh": {"name": "相似队列 (Cohort · “n=”)",
+               "plain": "刘教授既往病例中与你眼睛最相似的一组；“n=”就是他们的数量。",
+               "why": "群体越大、越相似，预期结果越可信——那是真实经验，不是猜测。"},
+        "en": {"name": "Cohort (\"n=\")",
+               "plain": "The group of Prof. Liu's past patients whose eyes best match yours; \"n=\" is how many.",
+               "why": "A larger, closer group makes the outcome more trustworthy — real experience, not a guess."},
+        "ja": {"name": "コホート (Cohort · 「n=」)",
+               "plain": "劉教授の過去症例のうち、あなたの眼に最も近いグループ。「n=」はその数です。",
+               "why": "大きく近いグループほど予測は信頼でき、推測ではなく実際の経験に基づきます。"}},
+    "kanon": {
+        "zh": {"name": "k-匿名 (k-Anonymity)",
+               "plain": "一种隐私保护：只有当足够多的相似患者存在时才作答，从而无法反推出某一个人。",
+               "why": "既保护每位患者隐私，也防止系统在数据太少时过度断言。"},
+        "en": {"name": "k-anonymity",
+               "plain": "A privacy safeguard: results appear only when enough similar patients exist, so no "
+                        "single person can be singled out.",
+               "why": "It protects patient privacy and stops the system over-claiming on too little data."},
+        "ja": {"name": "k-匿名性 (k-Anonymity)",
+               "plain": "十分な数の類似患者がいる時のみ結果を表示し、個人を特定できないようにする仕組みです。",
+               "why": "患者のプライバシーを守り、データ不足時の過剰な断定を防ぎます。"}},
+}
+
+def data_anchor(key: str, df: pd.DataFrame, lang: str) -> str:
+    """A sentence grounding the term in Prof. Liu's ACTUAL cohort numbers."""
+    N = len(df)
+    if key == "acd":
+        lo, hi = np.percentile(df["acd"], [10, 90])
+        return {"zh": f"刘教授 {N} 例中，前房深度多在 {lo:.1f}–{hi:.1f} mm；较深者通常安全空间更充裕。",
+                "en": f"Across Prof. Liu's {N} eyes, ACD mostly falls {lo:.1f}–{hi:.1f} mm; deeper "
+                      f"chambers usually have more safety room.",
+                "ja": f"劉教授の {N} 眼では ACD は概ね {lo:.1f}–{hi:.1f} mm。深いほど安全域に余裕があります。"}[lang]
+    if key == "wtw":
+        lo, hi = np.percentile(df["wtw"], [10, 90])
+        return {"zh": f"刘教授病例的角膜横径多在 {lo:.1f}–{hi:.1f} mm 之间。",
+                "en": f"In Prof. Liu's records, WTW mostly ranges {lo:.1f}–{hi:.1f} mm.",
+                "ja": f"劉教授の症例では WTW は概ね {lo:.1f}–{hi:.1f} mm です。"}[lang]
+    if key == "sts":
+        lo, hi = np.percentile(df["sts"], [10, 90])
+        return {"zh": f"刘教授据此（多在 {lo:.1f}–{hi:.1f} mm）为每只眼选定尺寸。",
+                "en": f"Prof. Liu uses this (mostly {lo:.1f}–{hi:.1f} mm) to size each eye.",
+                "ja": f"劉教授はこの値（概ね {lo:.1f}–{hi:.1f} mm）でサイズを決めます。"}[lang]
+    if key == "sph":
+        worst, best = df["sph"].min(), df["sph"].max()
+        return {"zh": f"刘教授病例覆盖约 {worst:.0f}~{best:.0f} D 的近视范围。",
+                "en": f"Prof. Liu's cases span roughly {worst:.0f} to {best:.0f} D of myopia.",
+                "ja": f"劉教授の症例は約 {worst:.0f}~{best:.0f} D の近視をカバーします。"}[lang]
+    if key == "vault":
+        med = int(df["vault"].median()); lo, hi = np.percentile(df["vault"], [25, 75])
+        return {"zh": f"刘教授病例的拱高中位约 {med} µm（多在 {lo:.0f}–{hi:.0f} µm），落在理想安全区间。",
+                "en": f"Median vault in Prof. Liu's records is ~{med} µm (mostly {lo:.0f}–{hi:.0f} µm), "
+                      f"inside the ideal safety window.",
+                "ja": f"劉教授の症例のボールト中央値は約 {med} µm（概ね {lo:.0f}–{hi:.0f} µm）で理想的な安全域内です。"}[lang]
+    if key == "va":
+        pct = float((df["bcva_final"] >= 1.0).mean()) * 100
+        return {"zh": f"在刘教授病例中，约 {pct:.0f}% 的眼术后达到 1.0 或更好的视力。",
+                "en": f"In Prof. Liu's records, about {pct:.0f}% of eyes reach 1.0 vision or better.",
+                "ja": f"劉教授の症例では、約 {pct:.0f}% の眼が術後 1.0 以上に達します。"}[lang]
+    if key == "lens_size":
+        modal = df["size"].mode().iloc[0]; share = float((df["size"] == modal).mean()) * 100
+        return {"zh": f"刘教授 {N} 例中，镜片尺寸从 12.1 到 13.7 mm 不等，最常用 {modal:g} mm（约 {share:.0f}% 的眼）。",
+                "en": f"Across Prof. Liu's {N} eyes, sizes span 12.1–13.7 mm; the most common is {modal:g} mm "
+                      f"(about {share:.0f}% of eyes).",
+                "ja": f"劉教授の {N} 眼ではサイズは 12.1〜13.7 mm。最も多いのは {modal:g} mm（約 {share:.0f}%）です。"}[lang]
+    if key == "cohort":
+        return {"zh": f"相似队列取自刘教授 {N} 只经核验的眼；调整上方滑块时，n 会实时变化。",
+                "en": f"The cohort is drawn from Prof. Liu's {N} verified eyes; n updates live as you move the "
+                      f"sliders above.",
+                "ja": f"コホートは劉教授の {N} 眼の検証済みデータから抽出され、上のスライダー操作で n が即時に変化します。"}[lang]
+    if key == "kanon":
+        return {"zh": f"本演示的下限为 k={K_ANON}：低于此数即拒绝作答。在刘教授 {N} 例中，常见参数的眼很容易满足，"
+                      f"只有罕见组合才会低于门槛。",
+                "en": f"The floor here is k={K_ANON}: below it the system refuses to answer. Across Prof. Liu's "
+                      f"{N} eyes, typical eyes clear it easily — only rare parameter combinations fall below.",
+                "ja": f"本デモの下限は k={K_ANON}：これを下回ると回答しません。劉教授の {N} 眼では一般的な眼は容易に満たし、"
+                      f"稀な組み合わせのみ下回ります。"}[lang]
+    return ""
+
+def term_help(key: str) -> str:
+    """One-line hover tooltip: plain meaning + why it matters."""
+    g = GLOSSARY[key][st.session_state.get("lang", "en")]
+    return f"{g['plain']} — {g['why']}"
+
+def render_glossary(df: pd.DataFrame) -> None:
+    lang = st.session_state.get("lang", "en")
+    cols = st.columns(2)
+    for i, key in enumerate(["acd", "wtw", "sts", "sph", "vault", "va",
+                             "lens_size", "cohort", "kanon"]):
+        g = GLOSSARY[key][lang]
+        html = (f"<div class='term-card'><div class='term-name'>{g['name']}</div>"
+                f"<div><b>{t('plain_label')}</b> {g['plain']}</div>"
+                f"<div><b>{t('why_label')}</b> {g['why']}</div>"
+                f"<div class='term-data'>📎 {data_anchor(key, df, lang)}</div></div>")
+        cols[i % 2].markdown(html, unsafe_allow_html=True)
+
+def render_manual_vs_ai(df: pd.DataFrame, n: int) -> None:
+    lang = st.session_state.get("lang", "en"); N = len(df); k = K_ANON
+    man = "".join(f"<li>{p}</li>" for p in T["cmp_manual_pts"][lang])
+    ai = "".join(f"<li>{p.format(N=N, n=n, k=k)}</li>" for p in T["cmp_ai_pts"][lang])
+    c1, c2 = st.columns(2)
+    c1.markdown(f"<div class='cmp-card cmp-manual'><h4>{t('cmp_manual_title')}</h4>"
+                f"<ul>{man}</ul></div>", unsafe_allow_html=True)
+    c2.markdown(f"<div class='cmp-card cmp-ai'><h4>{t('cmp_ai_title')}</h4>"
+                f"<ul>{ai}</ul></div>", unsafe_allow_html=True)
+    st.caption("📎 " + t("cmp_anchor").format(N=N, n=n, k=k))
+
+
 def main() -> None:
     st.set_page_config(page_title="Liu's Digital Brain", page_icon="🧠", layout="wide")
+    st.markdown(CSS, unsafe_allow_html=True)
 
     # language switcher (sets session state before anything else renders)
     with st.sidebar:
@@ -487,12 +719,16 @@ def main() -> None:
         st.write(t("t1_intro"))
         c = st.columns(5)
         q = {   # shared inputs — feed BOTH the new live explorer and the original flow
-            "acd": c[0].number_input(t("acd"), 2.6, 4.2, 3.40, 0.01),
-            "wtw": c[1].number_input(t("wtw"), 10.5, 13.0, 11.80, 0.01),
-            "sts": c[2].number_input(t("sts"), 10.5, 13.5, 12.05, 0.01),
-            "sph": c[3].number_input(t("sph"), -20.0, -2.0, -9.00, 0.25),
+            "acd": c[0].number_input(t("acd"), 2.6, 4.2, 3.40, 0.01, help=term_help("acd")),
+            "wtw": c[1].number_input(t("wtw"), 10.5, 13.0, 11.80, 0.01, help=term_help("wtw")),
+            "sts": c[2].number_input(t("sts"), 10.5, 13.5, 12.05, 0.01, help=term_help("sts")),
+            "sph": c[3].number_input(t("sph"), -20.0, -2.0, -9.00, 0.25, help=term_help("sph")),
             "age": c[4].number_input(t("age"), 18, 55, 30, 1),
         }
+
+        # NEW (additive): plain-language glossary, each term anchored in real data
+        with st.expander(t("understand_terms")):
+            render_glossary(df)
 
         # ============================================================
         # NEW (additive): live similar-case explorer + honesty meter + scrubber
@@ -505,14 +741,20 @@ def main() -> None:
 
         # --- LIVE cohort-size meter + k-anonymity honesty gate ---
         meter, msg = st.columns([1, 4])
-        meter.metric(t("meter_label"), f"n = {n}")
+        meter.metric(t("meter_label"), f"n = {n}", help=term_help("cohort"))
         if n < K_ANON:
             # honest refusal — the designed moment that proves we don't fabricate
             msg.error(t("cohort_thin").format(n=n, k=K_ANON))
+            st.markdown(f"<span class='pulse-badge badge-warn'>{t('live_badge')} · "
+                        f"{t('kanon_bad_badge')}</span>", unsafe_allow_html=True)
+            st.markdown("<div class='scanbar'></div>", unsafe_allow_html=True)
             st.plotly_chart(cohort_scatter(df, q, mask), use_container_width=True)
             st.caption(t("scatter_title"))
         else:
             msg.success(t("cohort_ok").format(n=n))
+            st.markdown(f"<span class='pulse-badge badge-ok'>{t('live_badge')} · "
+                        f"{t('kanon_ok_badge')}</span>", unsafe_allow_html=True)
+            st.markdown("<div class='scanbar'></div>", unsafe_allow_html=True)
             modal_size = cohort["size"].mode().iloc[0]
 
             left, right = st.columns([3, 2])
@@ -521,7 +763,7 @@ def main() -> None:
                 st.plotly_chart(cohort_scatter(df, q, mask), use_container_width=True)
             with right:
                 st.markdown("#### " + t("t1_cohort"))
-                st.metric(t("t1_common_size"), f"{modal_size} mm")
+                st.metric(t("t1_common_size"), f"{modal_size} mm", help=term_help("lens_size"))
                 st.markdown(badge("observed", n))
                 st.info(t("t1_insight_txt").format(
                     n=n, size=modal_size, v=timepoint_stats(cohort, 90)["vault_median"]))
@@ -554,6 +796,13 @@ def main() -> None:
                 show = cohort[["acd", "wtw", "sts", "sph", "size", "vault"]].head(15).reset_index()
                 show.columns = t("t1_table_cols")
                 st.dataframe(show, use_container_width=True, hide_index=True, height=220)
+
+        # ============================================================
+        # NEW (additive): manual vs. AI-assisted comparison (uses live n)
+        # ============================================================
+        st.markdown("---")
+        st.markdown("### " + t("cmp_h"))
+        render_manual_vs_ai(df, n)
 
         # ============================================================
         # ORIGINAL (unchanged): historical expert case matching (button flow)
