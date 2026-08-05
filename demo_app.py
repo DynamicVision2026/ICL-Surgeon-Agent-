@@ -270,6 +270,66 @@ T: dict[str, dict[str, str]] = {
     "risk_high": {"zh": "拱高过高（>1000µm）：可能引起房角变窄或眼压升高。",
                   "en": "Vault too high (>1000 µm): may narrow the drainage angle or raise eye pressure.",
                   "ja": "ボールトが高すぎる（>1000µm）：隅角の狭小化や眼圧上昇のリスク。"},
+    # --- patient-facing anatomy education & gentle-landing (outcome-free) ---
+    "edu_head": {"zh": "了解你的眼睛，以及 ICL 温柔工作的原理",
+                 "en": "Understand your eye — and how the ICL gently works",
+                 "ja": "あなたの眼と、ICL のやさしい仕組みを知る"},
+    "edu_persona": {"zh": "🎓 互动解剖导览 · 仅供科普教育，不预测任何手术结果。",
+                    "en": "🎓 Interactive anatomy guide · educational only — no outcomes are predicted.",
+                    "ja": "🎓 インタラクティブ解剖ガイド · 教育目的のみで、結果は予測しません。"},
+    "edu_intro": {"zh": "输入你的生物测量数据，探索属于你自己的眼睛结构，并亲眼看到 ICL 如何在不切开角膜的情况下轻轻就位。",
+                  "en": "Enter your measurements to explore your own eye's structure and watch how the ICL "
+                        "gently settles into place — without cutting the cornea.",
+                  "ja": "計測値を入力して、あなた自身の眼の構造を探り、角膜を切らずに ICL がそっと収まる様子をご覧ください。"},
+    "meet_h": {"zh": "① 认识你的眼睛（结构自探索）", "en": "① Meet your eye (structural self-discovery)",
+               "ja": "① あなたの眼を知る（構造の自己発見）"},
+    "anat_h": {"zh": "你的前房结构示意", "en": "Your anterior-segment sketch", "ja": "あなたの前房の模式図"},
+    "anat_caption": {"zh": "根据你的测量值绘制的示意图（仅供说明，非诊断）。",
+                     "en": "Drawn to scale from your measurements (illustrative, not a diagnosis).",
+                     "ja": "計測値に基づく模式図です（説明用であり診断ではありません）。"},
+    "pop_h": {"zh": "你的数据 vs. 常见范围", "en": "Your measurements vs. the common range",
+              "ja": "あなたの数値 vs. 一般的な範囲"},
+    "pop_you": {"zh": "你", "en": "You", "ja": "あなた"},
+    "pop_normal": {"zh": "好消息：你的数据落在该手术常见的范围内。具体是否适合，请由医生评估。",
+                   "en": "Good news: your measurements sit within the common range for this procedure. "
+                         "Your surgeon will assess what's right for you.",
+                   "ja": "朗報：あなたの数値はこの手術で一般的な範囲内です。適否は医師が評価します。"},
+    "landing_h": {"zh": "② 温柔就位：ICL 如何轻轻安家", "en": "② The gentle landing: how the ICL softly comes to rest",
+                  "ja": "② やさしい着地：ICL がそっと収まるまで"},
+    "landing_intro": {"zh": "拖动下方滑块，亲手看着晶体一步步就位——全程角膜完好、从不被切开。",
+                      "en": "Drag the slider and watch the lens settle, step by step — the cornea stays whole "
+                            "and is never cut.",
+                      "ja": "スライダーを動かし、レンズが少しずつ収まる様子をご覧ください。角膜は終始そのままで切開されません。"},
+    "stage_label": {"zh": "步骤", "en": "Step", "ja": "ステップ"},
+    "cornea_intact": {"zh": "角膜全程完好，从未被切开", "en": "The cornea stays whole — never cut",
+                      "ja": "角膜は終始そのまま——切開されません"},
+    "lbl_iris": {"zh": "虹膜", "en": "Iris", "ja": "虹彩"},
+    "lbl_chamber": {"zh": "前房", "en": "Anterior chamber", "ja": "前房"},
+    "landing_open_tag": {"zh": "微小自闭合切口 ~2–3mm", "en": "tiny self-sealing opening ~2–3mm",
+                         "ja": "自己閉鎖の極小切開 ~2–3mm"},
+    "landing_fold_tag": {"zh": "折叠的柔软晶体", "en": "soft folded lens", "ja": "折りたたんだ柔らかいレンズ"},
+    "landing_unfold_tag": {"zh": "在眼内缓缓展开", "en": "unfolding gently inside", "ja": "眼内でゆっくり展開"},
+    "landing_rest_tag": {"zh": "安放于虹膜后方", "en": "resting behind the iris", "ja": "虹彩の後ろに着地"},
+    "landing_stage_names": {
+        "zh": ["微创小切口", "折叠植入", "缓缓展开", "虹膜后就位"],
+        "en": ["Tiny opening", "Folded lens enters", "Unfolds softly", "Rests behind the iris"],
+        "ja": ["極小の切開", "折りたたんで挿入", "ゆっくり展開", "虹彩の後ろに着地"]},
+    "landing_narr": {
+        "zh": ["医生先做一个约 2–3 毫米、可自行闭合的微小切口——比一粒米还小，通常无需缝线。",
+               "柔软的晶体像卷起的花瓣一样折叠着，从小切口轻轻送入眼内。它比隐形眼镜还柔软。",
+               "在眼内，晶体缓缓、平稳地自行展开——没有牵拉，没有切割。",
+               "晶体轻轻安放在虹膜后方的自然空间里，由眼睛自身结构稳稳托住。什么也不会被取出，角膜始终完好。"],
+        "en": ["A tiny ~2–3 mm self-sealing opening is made — smaller than a grain of rice, usually "
+               "needing no stitches.",
+               "The soft lens, folded like a rolled petal, is gently guided in through the tiny opening. "
+               "It's softer than a contact lens.",
+               "Inside the eye, the lens slowly and smoothly unfolds on its own — no pulling, no cutting.",
+               "The lens rests gently in the natural space behind the iris, held by the eye's own "
+               "structures. Nothing is removed, and the cornea stays intact."],
+        "ja": ["約 2〜3mm の自己閉鎖する極小の切開を作ります。米粒より小さく、通常縫合は不要です。",
+               "柔らかいレンズを花びらのように折りたたみ、小さな切開からそっと挿入します。コンタクトより柔らかい素材です。",
+               "眼内でレンズがゆっくり滑らかに自然に展開します。引っ張りも切開もありません。",
+               "レンズは虹彩の後ろの自然な空間にそっと収まり、眼自身の構造に支えられます。何も取り除かれず、角膜はそのままです。"]},
 }
 
 def t(key: str) -> str:
@@ -331,14 +391,6 @@ def load_history(n: int = 420, seed: int = 7) -> pd.DataFrame:
 
 # k-anonymity floor: below this many similar eyes, the agent refuses to speak
 K_ANON = 5
-
-# post-op timepoints (day offset) + settle/recovery curves applied to the cohort.
-# vault settles slightly from an early high; vision recovers over the first weeks.
-TP_DAYS = [1, 7, 30, 90, 180, 365, 730, 1095]
-VAULT_SETTLE = {1: 1.14, 7: 1.09, 30: 1.04, 90: 1.00, 180: 0.99,
-                365: 0.98, 730: 0.97, 1095: 0.96}
-VA_RECOVERY = {1: 0.60, 7: 0.84, 30: 0.96, 90: 1.00, 180: 1.00,
-               365: 1.00, 730: 0.99, 1095: 0.99}
 
 
 # ===========================================================================
@@ -412,150 +464,118 @@ def build_nomogram(df: pd.DataFrame) -> pd.DataFrame:
 
 
 # ===========================================================================
-# 4. 3D vault preview (schematic — ICL posterior surface over crystalline lens)
+# 4. Patient-facing anatomy education & "Gentle Landing" mechanics (OUTCOME-FREE)
+#    NO post-op vault/vision predictions and NO risk-zone outcome claims here.
 # ===========================================================================
-VAULT_ZONES = [(0, 250, "#e76f51", "low"), (250, 750, "#2a9d8f", "ideal"),
-               (750, 1000, "#e9c46a", "monitor"), (1000, 1300, "#e63946", "high")]
-
 def hex_rgba(h: str, a: float) -> str:
     h = h.lstrip("#")
     return f"rgba({int(h[0:2],16)},{int(h[2:4],16)},{int(h[4:6],16)},{a})"
 
-def vault_zone(v: float) -> dict:
-    """Classify a vault height into a surgical-quality/risk band."""
-    if v < 250:
-        k, color, bg, icon = "low", "#e76f51", "#fde8e2", "⚠️"
-    elif v <= 750:
-        k, color, bg, icon = "ideal", "#2a9d8f", "#e6f4f1", "✅"
-    elif v <= 1000:
-        k, color, bg, icon = "monitor", "#e9c46a", "#fcf3d9", "🟡"
-    else:
-        k, color, bg, icon = "high", "#e63946", "#fde0e3", "⛔"
-    return {"key": k, "color": color, "bg": bg, "icon": icon, "msg": t("risk_" + k)}
+def _arc(x0: float, x1: float, apex_y: float, base_y: float, n: int = 60):
+    xs = np.linspace(x0, x1, n)
+    mid = (x0 + x1) / 2; half = (x1 - x0) / 2
+    ys = base_y + (apex_y - base_y) * (1 - ((xs - mid) / half) ** 2)
+    return xs, ys
 
-def vault_preview(vault_um: float) -> go.Figure:
-    """Labeled 3D: crystalline lens dome (lower) + ICL surface (upper) + the
-    vault gap called out explicitly. Kept name so existing callers still work."""
-    vmm = vault_um / 1000.0
-    z = vault_zone(vault_um)
-    g = np.linspace(-3, 3, 40)
-    X, Y = np.meshgrid(g, g)
-    R2 = X ** 2 + Y ** 2
-    mask = R2 <= 9
-    lens = np.where(mask, -0.16 * R2, np.nan)              # crystalline lens anterior dome
-    icl = np.where(mask, -0.16 * R2 + vmm, np.nan)         # ICL posterior surface, vault above
+def anatomy_cross_section(acd: float, wtw: float) -> go.Figure:
+    """A to-scale, labelled sketch of the patient's OWN anterior segment.
+    Pure anatomy — no device, no outcome, no prediction."""
+    half = wtw / 2
     fig = go.Figure()
-    fig.add_surface(x=X, y=Y, z=lens, showscale=False, opacity=0.9, colorscale="Blues")
-    fig.add_surface(x=X, y=Y, z=icl, showscale=False, opacity=0.6, colorscale="Teal")
-    # explicit gap indicator at centre + floating labels for ICL / lens / vault
-    fig.add_scatter3d(x=[0, 0], y=[0, 0], z=[0, vmm], mode="lines",
-                      line=dict(color=z["color"], width=8), hoverinfo="skip")
-    fig.add_scatter3d(x=[0, 0, 0], y=[3.0, 3.0, 0.0], z=[vmm + 0.35, -0.35, vmm / 2],
-                      mode="text", hoverinfo="skip",
-                      text=["ICL", t("lbl_lens"), f"{t('lbl_vault')} {int(vault_um)}µm"],
-                      textfont=dict(size=13, color=["#0b7285", "#1d3557", z["color"]]))
-    fig.update_layout(height=430, margin=dict(l=0, r=0, t=30, b=0), uirevision="vault",
-                      showlegend=False, transition=dict(duration=400, easing="cubic-in-out"),
-                      scene=dict(xaxis_title="mm", yaxis_title="mm", zaxis_title="mm",
-                                 aspectmode="manual", aspectratio=dict(x=1, y=1, z=0.6)),
-                      title=f"Vault ≈ {int(vault_um)} µm")
-    return fig
-
-def vault_view_side(vault_um: float) -> go.Figure:
-    """Side / profile cross-section (侧视图) — the clearest place for labels."""
-    vmm = vault_um / 1000.0
-    z = vault_zone(vault_um)
-    x = np.linspace(-3, 3, 121)
-    lens_y = -0.16 * x ** 2
-    icl_y = lens_y + vmm
-    cornea_y = 1.15 - 0.05 * x ** 2
-    fig = go.Figure()
-    fig.add_scatter(x=x, y=cornea_y, mode="lines", line=dict(color="#cfd8dc", width=3),
+    cx, cy = _arc(-half, half, 1.0, 0.0)                       # cornea (intact dome)
+    fig.add_scatter(x=cx, y=cy, mode="lines", line=dict(color="#7fb2c4", width=4),
                     hoverinfo="skip")
-    fig.add_scatter(x=x, y=icl_y, mode="lines", line=dict(color="#0b7285", width=3),
+    for sgn in (-1, 1):                                        # iris bars, pupil gap centre
+        fig.add_scatter(x=[sgn * 1.5, sgn * half], y=[-acd, -acd], mode="lines",
+                        line=dict(color="#8d6e63", width=6), hoverinfo="skip")
+    lx, ly = _arc(-2.6, 2.6, -acd - 1.7, -acd)                 # crystalline lens dome
+    fig.add_scatter(x=lx, y=ly, mode="lines", line=dict(color="#c9a227", width=4),
                     hoverinfo="skip")
-    fig.add_scatter(x=x, y=lens_y, mode="lines", line=dict(color="#1d3557", width=3),
-                    fill="tonexty", fillcolor=hex_rgba(z["color"], 0.28), hoverinfo="skip")
-    fig.add_shape(type="line", x0=0, x1=0, y0=0, y1=vmm,
-                  line=dict(color=z["color"], width=2, dash="dot"))
-    fig.add_annotation(x=0, y=vmm / 2, text=f"{t('lbl_vault')}<br>{int(vault_um)} µm",
-                       showarrow=False, font=dict(size=12, color=z["color"]),
-                       bgcolor="rgba(255,255,255,.75)")
-    fig.add_annotation(x=-2.0, y=icl_y[20] + 0.18, text="ICL", showarrow=True, arrowhead=2,
-                       ax=-28, ay=-22, font=dict(size=13, color="#0b7285"))
-    fig.add_annotation(x=2.0, y=lens_y[100] - 0.18, text=t("lbl_lens"), showarrow=True,
-                       arrowhead=2, ax=28, ay=24, font=dict(size=13, color="#1d3557"))
-    fig.add_annotation(x=0, y=cornea_y[60] + 0.12, text=t("lbl_cornea"), showarrow=False,
-                       font=dict(size=11, color="#90a4ae"))
-    fig.update_layout(height=340, margin=dict(l=0, r=0, t=10, b=0), showlegend=False,
-                      transition=dict(duration=300),
-                      xaxis=dict(visible=False, range=[-3.2, 3.2]),
+    fig.add_shape(type="line", x0=0, x1=0, y0=0, y1=-acd,      # ACD dimension
+                  line=dict(color="#2a9d8f", width=2, dash="dot"))
+    fig.add_annotation(x=0.15, y=-acd / 2, text=f"ACD {acd:.2f} mm", showarrow=False,
+                       font=dict(size=12, color="#2a9d8f"), xanchor="left",
+                       bgcolor="rgba(255,255,255,.7)")
+    fig.add_shape(type="line", x0=-half, x1=half, y0=1.35, y1=1.35,   # WTW dimension
+                  line=dict(color="#457b9d", width=2))
+    fig.add_annotation(x=0, y=1.62, text=f"WTW {wtw:.2f} mm", showarrow=False,
+                       font=dict(size=12, color="#457b9d"))
+    fig.add_annotation(x=0, y=1.02, text=t("lbl_cornea"), showarrow=False,
+                       font=dict(size=12, color="#4f8296"))
+    fig.add_annotation(x=-half + 0.2, y=-acd + 0.35, text=t("lbl_iris"), showarrow=False,
+                       font=dict(size=11, color="#8d6e63"), xanchor="left")
+    fig.add_annotation(x=0, y=-acd - 1.9, text=t("lbl_lens"), showarrow=False,
+                       font=dict(size=12, color="#a07d1e"))
+    fig.add_annotation(x=-1.55, y=-acd / 2, text=t("lbl_chamber"), showarrow=False,
+                       font=dict(size=10, color="#90a4ae"), xanchor="right")
+    fig.update_layout(height=360, margin=dict(l=0, r=0, t=6, b=0), showlegend=False,
+                      xaxis=dict(visible=False, range=[-half - 1.2, half + 1.2]),
                       yaxis=dict(visible=False, scaleanchor="x", scaleratio=1))
     return fig
 
-def vault_view_top(vault_um: float) -> go.Figure:
-    """Top / overhead view (俯视图) — the ICL centred over the pupil."""
-    z = vault_zone(vault_um)
-    th = np.linspace(0, 2 * np.pi, 120)
+def pop_hist(df: pd.DataFrame, col: str, value: float, title: str, color: str) -> go.Figure:
+    """Where the patient's measurement sits within the general population range.
+    Positioning, not a suitability score or outcome."""
+    fig = go.Figure(go.Histogram(x=df[col], nbinsx=24, marker_color=hex_rgba(color, 0.5)))
+    fig.add_shape(type="line", x0=value, x1=value, y0=0, y1=1, yref="paper",
+                  line=dict(color="#111", width=3))
+    fig.add_annotation(x=value, y=1.06, yref="paper", text=t("pop_you"), showarrow=False,
+                       font=dict(size=12, color="#111"))
+    fig.update_layout(height=210, margin=dict(l=0, r=0, t=24, b=0), showlegend=False,
+                      title=title, xaxis_title="mm", yaxis=dict(visible=False), bargap=0.05)
+    return fig
 
-    def circ(r):
-        return r * np.cos(th), r * np.sin(th)
-
+def gentle_landing_figure(stage: int) -> go.Figure:
+    """Schematic micro-assembly. The cornea is ALWAYS intact and labelled as never
+    cut. stage 0 tiny opening -> 1 folded lens enters -> 2 unfolds -> 3 rests
+    behind the iris. No numbers, no outcomes — pure gentle mechanics."""
+    acd = 3.0; half = 5.6; icl = "#2a9d8f"
     fig = go.Figure()
-    xo, yo = circ(5.8)
-    fig.add_scatter(x=xo, y=yo, mode="lines", fill="toself", fillcolor="#eceff1",
-                    line=dict(color="#cfd8dc"), hoverinfo="skip")
-    xi, yi = circ(3.0)
-    fig.add_scatter(x=xi, y=yi, mode="lines", fill="toself",
-                    fillcolor=hex_rgba(z["color"], 0.22), line=dict(color=z["color"], width=2),
+    cx, cy = _arc(-half, half, 1.2, 0.0)                       # cornea (intact)
+    fig.add_scatter(x=cx, y=cy, mode="lines", line=dict(color="#8ac6d1", width=5),
                     hoverinfo="skip")
-    xp, yp = circ(1.6)
-    fig.add_scatter(x=xp, y=yp, mode="lines", fill="toself", fillcolor="#37474f",
-                    line=dict(color="#263238"), hoverinfo="skip")
-    fig.add_annotation(x=0, y=3.3, text="ICL", showarrow=False, font=dict(size=12, color=z["color"]))
-    fig.add_annotation(x=0, y=0, text=t("lbl_pupil"), showarrow=False,
-                       font=dict(size=11, color="white"))
-    fig.update_layout(height=340, margin=dict(l=0, r=0, t=10, b=0), showlegend=False,
-                      xaxis=dict(visible=False, range=[-6.2, 6.2]),
+    for sgn in (-1, 1):                                        # iris
+        fig.add_scatter(x=[sgn * 1.5, sgn * half], y=[-acd, -acd], mode="lines",
+                        line=dict(color="#8d6e63", width=8), hoverinfo="skip")
+    lx, ly = _arc(-2.8, 2.8, -acd - 1.8, -acd)                 # crystalline lens
+    fig.add_scatter(x=lx, y=ly, mode="lines", line=dict(color="#c9a227", width=4),
+                    hoverinfo="skip")
+
+    if stage == 0:                                            # tiny self-sealing opening
+        fig.add_scatter(x=[half - 0.9, half - 0.2], y=[0.55, 0.15], mode="lines",
+                        line=dict(color="#e76f51", width=5), hoverinfo="skip")
+        fig.add_annotation(x=half - 0.55, y=0.95, text=t("landing_open_tag"), showarrow=True,
+                           arrowhead=2, ax=-12, ay=-26, font=dict(size=11, color="#e76f51"))
+    elif stage == 1:                                          # folded lens enters
+        fx, fy = _arc(1.2, 2.8, -0.9, -1.5, 30)
+        fig.add_scatter(x=fx, y=fy, mode="lines", line=dict(color=icl, width=7),
+                        hoverinfo="skip")
+        fig.add_annotation(x=2.0, y=-0.5, text=t("landing_fold_tag"), showarrow=True,
+                           arrowhead=2, ax=22, ay=-22, font=dict(size=11, color=icl))
+    elif stage == 2:                                          # unfolds softly
+        ux, uy = _arc(-2.4, 2.4, -1.35, -1.85, 60)
+        fig.add_scatter(x=ux, y=uy, mode="lines", line=dict(color=icl, width=6),
+                        hoverinfo="skip")
+        fig.add_annotation(x=0, y=-1.05, text=t("landing_unfold_tag"), showarrow=False,
+                           font=dict(size=11, color=icl))
+    else:                                                     # rests behind the iris
+        rx, ry = _arc(-2.6, 2.6, -acd - 0.15, -acd - 0.5, 60)
+        fig.add_scatter(x=rx, y=ry, mode="lines", line=dict(color=icl, width=6),
+                        hoverinfo="skip")
+        fig.add_annotation(x=0, y=-acd - 0.8, text=t("landing_rest_tag"), showarrow=False,
+                           font=dict(size=12, color=icl), bgcolor="rgba(255,255,255,.7)")
+
+    fig.add_annotation(x=0, y=1.4, text="✔ " + t("cornea_intact"), showarrow=False,
+                       font=dict(size=13, color="#2a9d8f"))
+    fig.add_annotation(x=-half + 0.3, y=-acd + 0.4, text=t("lbl_iris"), showarrow=False,
+                       font=dict(size=11, color="#8d6e63"), xanchor="left")
+    fig.add_annotation(x=0, y=-acd - 2.05, text=t("lbl_lens"), showarrow=False,
+                       font=dict(size=11, color="#a07d1e"))
+    fig.update_layout(height=380, margin=dict(l=0, r=0, t=12, b=0), showlegend=False,
+                      transition=dict(duration=350, easing="cubic-in-out"),
+                      xaxis=dict(visible=False, range=[-half - 0.8, half + 0.8]),
                       yaxis=dict(visible=False, scaleanchor="x", scaleratio=1))
     return fig
-
-def vault_risk_bar(vault_um: float) -> go.Figure:
-    """Horizontal risk-zone gauge with a live marker at the current vault."""
-    fig = go.Figure()
-    for lo, hi, color, key in VAULT_ZONES:
-        fig.add_shape(type="rect", x0=lo, x1=hi, y0=0, y1=1,
-                      fillcolor=hex_rgba(color, 0.55), line_width=0)
-        fig.add_annotation(x=(lo + min(hi, 1300)) / 2, y=0.5, text=t("zone_" + key),
-                           showarrow=False, font=dict(size=11, color="#333"))
-    v = min(vault_um, 1290)
-    fig.add_shape(type="line", x0=v, x1=v, y0=-0.15, y1=1.15, line=dict(color="#111", width=3))
-    fig.add_annotation(x=v, y=1.35, text=f"{int(vault_um)} µm", showarrow=False,
-                       font=dict(size=13, color="#111"))
-    fig.update_layout(height=120, margin=dict(l=6, r=6, t=26, b=26),
-                      transition=dict(duration=300),
-                      xaxis=dict(range=[0, 1300], title="µm", tickvals=[250, 750, 1000]),
-                      yaxis=dict(visible=False, range=[-0.2, 1.45]))
-    return fig
-
-def render_vault_preview(vault_um: float) -> None:
-    """UI: risk banner + zone gauge + view toggle (3D | side+top)."""
-    z = vault_zone(vault_um)
-    st.markdown(
-        f"<div style='background:{z['bg']};border-left:6px solid {z['color']};"
-        f"padding:10px 14px;border-radius:8px;animation:fadein .4s ease'>"
-        f"{z['icon']} <b>{int(vault_um)} µm</b> — {z['msg']}</div>", unsafe_allow_html=True)
-    st.plotly_chart(vault_risk_bar(vault_um), use_container_width=True)
-    view = st.radio(t("view_mode"), [t("view_3d"), t("view_2d")], horizontal=True,
-                    key="vault_view")
-    if view == t("view_3d"):
-        st.plotly_chart(vault_preview(vault_um), use_container_width=True)
-    else:
-        a, b = st.columns(2)
-        a.markdown("**" + t("view_side") + "**")
-        a.plotly_chart(vault_view_side(vault_um), use_container_width=True)
-        b.markdown("**" + t("view_top") + "**")
-        b.plotly_chart(vault_view_top(vault_um), use_container_width=True)
 
 
 # ===========================================================================
@@ -621,19 +641,6 @@ def cohort_scatter(df: pd.DataFrame, query: dict, mask: np.ndarray) -> go.Figure
                       xaxis_title="STS (mm)", yaxis_title="ACD (mm)",
                       legend=dict(orientation="h", y=1.08))
     return fig
-
-def timepoint_stats(cohort: pd.DataFrame, day: int) -> dict:
-    """Apply the settle/recovery curves to the cohort at a given post-op day."""
-    vault = cohort["vault"].values * VAULT_SETTLE[day]
-    va = cohort["bcva_final"].values * VA_RECOVERY[day]
-    return {
-        "vault_median": int(np.median(vault)),
-        "vault_p25": int(np.percentile(vault, 25)),
-        "vault_p75": int(np.percentile(vault, 75)),
-        "vault_dist": vault,
-        "va_dist": va,
-        "va_share_10": float(np.mean(va >= 1.0)),
-    }
 
 def badge(kind: str, n: int | None = None) -> str:
     """Provenance tag for the Scholar persona. kind = 'observed' | 'ratified'."""
@@ -815,8 +822,7 @@ def term_help(key: str) -> str:
 def render_glossary(df: pd.DataFrame) -> None:
     lang = st.session_state.get("lang", "en")
     cols = st.columns(2)
-    for i, key in enumerate(["acd", "wtw", "sts", "sph", "vault", "va",
-                             "lens_size", "cohort", "kanon"]):
+    for i, key in enumerate(["acd", "wtw", "sts", "sph"]):
         g = GLOSSARY[key][lang]
         html = (f"<div class='term-card'><div class='term-name'>{g['name']}</div>"
                 f"<div><b>{t('plain_label')}</b> {g['plain']}</div>"
@@ -861,127 +867,47 @@ def main() -> None:
 
     # ---------------- Tab 1: Patient Trust & Education ----------------
     with tab1:
-        st.subheader(t("t1_head"))
-        st.markdown(t("persona"))
-        st.write(t("t1_intro"))
-        c = st.columns(5)
-        q = {   # shared inputs — feed BOTH the new live explorer and the original flow
-            "acd": c[0].number_input(t("acd"), 2.6, 4.2, 3.40, 0.01, help=term_help("acd")),
-            "wtw": c[1].number_input(t("wtw"), 10.5, 13.0, 11.80, 0.01, help=term_help("wtw")),
-            "sts": c[2].number_input(t("sts"), 10.5, 13.5, 12.05, 0.01, help=term_help("sts")),
-            "sph": c[3].number_input(t("sph"), -20.0, -2.0, -9.00, 0.25, help=term_help("sph")),
-            "age": c[4].number_input(t("age"), 18, 55, 30, 1),
-        }
+        st.subheader(t("edu_head"))
+        st.markdown(t("edu_persona"))
+        st.write(t("edu_intro"))
 
-        # NEW (additive): plain-language glossary, each term anchored in real data
+        # ---- A. Meet Your Eye (anatomy self-discovery, outcome-free) ----
+        st.markdown("### " + t("meet_h"))
+        c = st.columns(4)
+        acd = c[0].number_input(t("acd"), 2.6, 4.2, 3.40, 0.01, help=term_help("acd"))
+        wtw = c[1].number_input(t("wtw"), 10.5, 13.0, 11.80, 0.01, help=term_help("wtw"))
+        sts = c[2].number_input(t("sts"), 10.5, 13.5, 12.05, 0.01, help=term_help("sts"))
+        sph = c[3].number_input(t("sph"), -20.0, -2.0, -9.00, 0.25, help=term_help("sph"))
         with st.expander(t("understand_terms")):
             render_glossary(df)
 
-        # ============================================================
-        # NEW (additive): live similar-case explorer + honesty meter + scrubber
-        # ============================================================
-        st.markdown("### " + t("explorer_h"))
-        tight = st.slider(t("tightness"), 1, 10, 5)
-        radius = 0.35 + (10 - tight) * 0.22          # tight=10 -> 0.35, tight=1 -> 2.33
-        cohort, dist, mask = cohort_within(df, q, radius)
-        n = len(cohort)
+        left, right = st.columns([3, 2])
+        with left:
+            st.markdown("#### " + t("anat_h"))
+            st.plotly_chart(anatomy_cross_section(acd, wtw), use_container_width=True)
+            st.caption(t("anat_caption"))
+        with right:
+            st.markdown("#### " + t("pop_h"))
+            st.plotly_chart(pop_hist(df, "acd", acd, t("acd"), "#2a9d8f"),
+                            use_container_width=True)
+            st.plotly_chart(pop_hist(df, "wtw", wtw, t("wtw"), "#457b9d"),
+                            use_container_width=True)
+            st.info(t("pop_normal"))
 
-        # --- LIVE cohort-size meter + k-anonymity honesty gate ---
-        meter, msg = st.columns([1, 4])
-        meter.metric(t("meter_label"), f"n = {n}", help=term_help("cohort"))
-        if n < K_ANON:
-            # honest refusal — the designed moment that proves we don't fabricate
-            msg.error(t("cohort_thin").format(n=n, k=K_ANON))
-            st.markdown(f"<span class='pulse-badge badge-warn'>{t('live_badge')} · "
-                        f"{t('kanon_bad_badge')}</span>", unsafe_allow_html=True)
-            st.markdown("<div class='scanbar'></div>", unsafe_allow_html=True)
-            st.plotly_chart(cohort_scatter(df, q, mask), use_container_width=True)
-            st.caption(t("scatter_title"))
-        else:
-            msg.success(t("cohort_ok").format(n=n))
-            st.markdown(f"<span class='pulse-badge badge-ok'>{t('live_badge')} · "
-                        f"{t('kanon_ok_badge')}</span>", unsafe_allow_html=True)
-            st.markdown("<div class='scanbar'></div>", unsafe_allow_html=True)
-            modal_size = cohort["size"].mode().iloc[0]
-
-            left, right = st.columns([3, 2])
-            with left:
-                st.markdown("#### " + t("scatter_title"))
-                st.plotly_chart(cohort_scatter(df, q, mask), use_container_width=True)
-            with right:
-                st.markdown("#### " + t("t1_cohort"))
-                st.metric(t("t1_common_size"), f"{modal_size} mm", help=term_help("lens_size"))
-                st.markdown(badge("observed", n))
-                st.info(t("t1_insight_txt").format(
-                    n=n, size=modal_size, v=timepoint_stats(cohort, 90)["vault_median"]))
-
-            # --- Longitudinal vault + vision scrubber ---
-            st.markdown("---")
-            st.markdown("#### " + t("scrubber_h"))
-            labels = t("tp_labels")
-            sel = st.select_slider(t("scrubber_tp"), options=list(range(len(TP_DAYS))),
-                                   value=3, format_func=lambda i: labels[i])
-            day = TP_DAYS[sel]
-            s = timepoint_stats(cohort, day)
-
-            sc = st.columns(3)
-            sc[0].metric(t("vault_at"), f"{s['vault_median']} µm")
-            sc[1].metric(t("t1_vault_range"), f"{s['vault_p25']}–{s['vault_p75']} µm")
-            sc[2].metric(t("va_at"), f"{s['va_share_10']*100:.0f}%")
-            st.markdown(badge("observed", n))
-
-            # enhanced vault visualisation: risk banner + zone gauge + 3D/side/top
-            render_vault_preview(s["vault_median"])
-            st.caption(t("scrubber_note").format(n=n))
-
-            gr1, gr2 = st.columns(2)
-            with gr1:
-                dist_fig = go.Figure(go.Histogram(x=s["vault_dist"], nbinsx=18,
-                                                  marker_color="#2a9d8f"))
-                dist_fig.update_layout(height=260, margin=dict(l=0, r=0, t=10, b=0),
-                                       xaxis_title="vault µm", yaxis_title="")
-                st.plotly_chart(dist_fig, use_container_width=True)
-            with gr2:
-                show = cohort[["acd", "wtw", "sts", "sph", "size", "vault"]].head(15).reset_index()
-                show.columns = t("t1_table_cols")
-                st.dataframe(show, use_container_width=True, hide_index=True, height=260)
-
-        # ============================================================
-        # NEW (additive): manual vs. AI-assisted comparison (uses live n)
-        # ============================================================
+        # ---- B. Gentle Landing micro-assembly simulator ----
         st.markdown("---")
-        st.markdown("### " + t("cmp_h"))
-        render_manual_vs_ai(df, n)
-
-        # ============================================================
-        # ORIGINAL (unchanged): historical expert case matching (button flow)
-        # ============================================================
-        st.markdown("---")
-        st.markdown("### " + t("expert_h"))
-        if st.button(t("match_btn"), type="primary"):
-            hits = match_cases(df, q, k=25)
-            pred_vault = int(hits["vault"].median())
-            p25, p75 = int(hits["vault"].quantile(.25)), int(hits["vault"].quantile(.75))
-            modal_size = hits["size"].mode().iloc[0]
-
-            st.markdown("### " + t("t1_cohort"))
-            m = st.columns(4)
-            m[0].metric(t("t1_cohort_n"), len(hits))
-            m[1].metric(t("t1_pred_vault"), f"{pred_vault} µm")
-            m[2].metric(t("t1_vault_range"), f"{p25}–{p75} µm")
-            m[3].metric(t("t1_common_size"), f"{modal_size} mm")
-
-            left, right = st.columns([3, 2])
-            with left:
-                st.markdown("#### " + t("t1_preview"))
-                st.plotly_chart(vault_preview(pred_vault), use_container_width=True)
-                st.caption(t("t1_preview_cap"))
-            with right:
-                st.markdown("#### " + t("t1_insight"))
-                st.info(t("t1_insight_txt").format(n=len(hits), size=modal_size, v=pred_vault))
-                show = hits[["acd", "wtw", "sts", "sph", "size", "vault"]].reset_index()
-                show.columns = t("t1_table_cols")
-                st.dataframe(show, use_container_width=True, hide_index=True, height=280)
+        st.markdown("### " + t("landing_h"))
+        st.write(t("landing_intro"))
+        names = t("landing_stage_names")
+        stage = st.select_slider(t("stage_label"), options=[0, 1, 2, 3], value=0,
+                                 format_func=lambda i: f"{i + 1}. {names[i]}")
+        lc, rc = st.columns([3, 2])
+        with lc:
+            st.plotly_chart(gentle_landing_figure(stage), use_container_width=True)
+        with rc:
+            st.markdown("#### " + names[stage])
+            st.info(t("landing_narr")[stage])
+            st.success("🛡️ " + t("cornea_intact"))
 
         st.caption(t("compliance"))
 
