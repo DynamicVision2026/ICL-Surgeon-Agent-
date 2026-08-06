@@ -330,6 +330,33 @@ T: dict[str, dict[str, str]] = {
                "柔らかいレンズを花びらのように折りたたみ、小さな切開からそっと挿入します。コンタクトより柔らかい素材です。",
                "眼内でレンズがゆっくり滑らかに自然に展開します。引っ張りも切開もありません。",
                "レンズは虹彩の後ろの自然な空間にそっと収まり、眼自身の構造に支えられます。何も取り除かれず、角膜はそのままです。"]},
+    "lbl_sulcus": {"zh": "睫状沟", "en": "Ciliary sulcus", "ja": "毛様溝"},
+    "spotlight_h": {"zh": "点亮结构，认识你的眼睛", "en": "Spotlight a structure to explore",
+                    "ja": "構造をハイライトして探索"},
+    "play_word": {"zh": "播放", "en": "Play", "ja": "再生"},
+    "play_hint": {"zh": "▶ 点击播放，或拖动下方时间轴，观看晶体温柔就位。",
+                  "en": "▶ Tap Play, or drag the timeline, to watch the lens gently land.",
+                  "ja": "▶ 再生をタップ、またはタイムラインをドラッグして、レンズの着地をご覧ください。"},
+    "fact_cornea": {"zh": "角膜是眼睛透明的“窗户”，也是全身最敏感的组织之一——但手术全程它始终保持完好。",
+                    "en": "The cornea is your eye's clear 'window' and one of the body's most sensitive "
+                          "tissues — yet it stays whole throughout.",
+                    "ja": "角膜は眼の透明な「窓」で、全身で最も敏感な組織の一つですが、手術中も無傷のままです。"},
+    "fact_iris": {"zh": "虹膜是眼睛的“光圈”，决定你眼睛的颜色并调节进入的光线。ICL 就安放在它的正后方。",
+                  "en": "The iris is your eye's 'aperture' — it gives your eyes their color and controls "
+                        "the light. The ICL rests just behind it.",
+                  "ja": "虹彩は眼の「絞り」で、瞳の色を決め、光の量を調整します。ICL はそのすぐ後ろに収まります。"},
+    "fact_chamber": {"zh": "前房是角膜与虹膜之间充满清澈房水的空间，为眼睛提供缓冲与营养。",
+                     "en": "The anterior chamber is the fluid-filled space between cornea and iris, "
+                           "cushioning and nourishing the eye.",
+                     "ja": "前房は角膜と虹彩の間の房水で満たされた空間で、眼を保護し栄養を与えます。"},
+    "fact_lens": {"zh": "晶状体是你自身的天然镜片，ICL 与它协同工作——不取出、也不替换你的晶状体。",
+                  "en": "The crystalline lens is your own natural lens; the ICL works alongside it — your "
+                        "lens is never removed or replaced.",
+                  "ja": "水晶体はあなた自身の天然レンズです。ICL はそれと協働し、水晶体を取り除いたり交換したりしません。"},
+    "fact_sulcus": {"zh": "睫状沟是虹膜后方的天然“搁架”，ICL 就轻轻搁在这里，由眼睛自身结构稳稳托住。",
+                    "en": "The ciliary sulcus is a natural 'shelf' behind the iris where the ICL gently "
+                          "rests, held by your eye's own structures.",
+                    "ja": "毛様溝は虹彩の後ろの天然の「棚」で、ICL はここにそっと収まり、眼自身の構造に支えられます。"},
 }
 
 def t(key: str) -> str:
@@ -465,6 +492,7 @@ def build_nomogram(df: pd.DataFrame) -> pd.DataFrame:
 
 # ===========================================================================
 # 4. Patient-facing anatomy education & "Gentle Landing" mechanics (OUTCOME-FREE)
+#    High-fidelity layered rendering + smooth Plotly-frame animation.
 #    NO post-op vault/vision predictions and NO risk-zone outcome claims here.
 # ===========================================================================
 def hex_rgba(h: str, a: float) -> str:
@@ -477,104 +505,198 @@ def _arc(x0: float, x1: float, apex_y: float, base_y: float, n: int = 60):
     ys = base_y + (apex_y - base_y) * (1 - ((xs - mid) / half) ** 2)
     return xs, ys
 
-def anatomy_cross_section(acd: float, wtw: float) -> go.Figure:
-    """A to-scale, labelled sketch of the patient's OWN anterior segment.
-    Pure anatomy — no device, no outcome, no prediction."""
+PAL = dict(cornea="#8fd3e8", chamber="#bfe6ef", iris="#b07a3c", iris2="#8d5f2a",
+           lens="#e6c34d", glow="#ffe08a", node="#2a9d8f", icl="#2a9d8f")
+
+def _glow(fig, xs, ys, color, width=24):
+    fig.add_scatter(x=xs, y=ys, mode="lines", line=dict(color=hex_rgba(color, 0.28), width=width),
+                    hoverinfo="skip")
+
+def _eye_scene(fig: "go.Figure", acd: float, wtw: float, highlight: str = None) -> float:
+    """Layered, organic anterior-segment rendering. `highlight` makes one
+    structure glow. Returns half-width. Pure anatomy — no device, no outcome."""
     half = wtw / 2
-    fig = go.Figure()
-    cx, cy = _arc(-half, half, 1.0, 0.0)                       # cornea (intact dome)
-    fig.add_scatter(x=cx, y=cy, mode="lines", line=dict(color="#7fb2c4", width=4),
+    hi = lambda name: highlight == name
+
+    # crystalline lens (concentric gradient arcs) — drawn first (deepest)
+    for k, sc in enumerate([1.0, 0.72, 0.44]):
+        lx, ly = _arc(-2.7 * sc, 2.7 * sc, -acd - 1.6 * sc, -acd)
+        tx, _ty = _arc(-2.7 * sc, 2.7 * sc, -acd, -acd)
+        if hi("lens") and k == 0:
+            _glow(fig, lx, ly, PAL["glow"], 26)
+        fig.add_scatter(x=np.concatenate([lx, tx[::-1]]), y=np.concatenate([ly, [-acd] * len(tx)]),
+                        mode="lines", fill="toself", fillcolor=hex_rgba(PAL["lens"], 0.25 + 0.18 * k),
+                        line=dict(color=hex_rgba("#a9832a", 0.5), width=1), hoverinfo="skip")
+
+    # anterior chamber (soft fill between cornea inner and iris plane)
+    cx, cy = _arc(-half, half, 0.55, -0.05)
+    if hi("chamber"):
+        _glow(fig, cx, cy, PAL["glow"], 22)
+    fig.add_scatter(x=np.concatenate([cx, [half, -half]]), y=np.concatenate([cy, [-acd, -acd]]),
+                    mode="lines", fill="toself", fillcolor=hex_rgba(PAL["chamber"], 0.30),
+                    line=dict(color="rgba(0,0,0,0)"), hoverinfo="skip")
+
+    # pupil (dark ellipse seen through the gap)
+    th = np.linspace(0, 2 * np.pi, 48)
+    fig.add_scatter(x=1.4 * np.cos(th), y=-acd + 0.5 * np.sin(th), mode="lines", fill="toself",
+                    fillcolor="rgba(20,20,28,.92)", line=dict(color="#111"), hoverinfo="skip")
+
+    # iris (both sides): glow + body + shading + radial fibres
+    for sgn in (-1, 1):
+        x0, x1 = sgn * 1.5, sgn * half
+        if hi("iris"):
+            fig.add_scatter(x=[x0, x1], y=[-acd, -acd], mode="lines",
+                            line=dict(color=hex_rgba(PAL["glow"], 0.55), width=22), hoverinfo="skip")
+        fig.add_scatter(x=[x0, x1], y=[-acd, -acd], mode="lines",
+                        line=dict(color=PAL["iris"], width=13), hoverinfo="skip")
+        fig.add_scatter(x=[x0, x1], y=[-acd, -acd], mode="lines",
+                        line=dict(color=hex_rgba(PAL["iris2"], 0.6), width=6), hoverinfo="skip")
+        fx, fy = [], []
+        for xx in np.linspace(x0, x1, 11):
+            fx += [xx, xx, None]; fy += [-acd - 0.26, -acd + 0.26, None]
+        fig.add_scatter(x=fx, y=fy, mode="lines", line=dict(color=hex_rgba("#5c3a17", 0.5), width=1),
+                        hoverinfo="skip")
+
+    # cornea (glassy layered crescent + glint)
+    ox, oy = _arc(-half, half, 1.25, 0.15)
+    ix, iy = _arc(-half, half, 0.72, -0.05)
+    if hi("cornea"):
+        _glow(fig, ox, oy, PAL["glow"], 26)
+    fig.add_scatter(x=np.concatenate([ox, ix[::-1]]), y=np.concatenate([oy, iy[::-1]]),
+                    mode="lines", fill="toself", fillcolor=hex_rgba(PAL["cornea"], 0.33),
+                    line=dict(color=hex_rgba(PAL["cornea"], 0.9), width=2), hoverinfo="skip")
+    gx, gy = _arc(-half * 0.5, half * 0.15, 1.13, 0.72)
+    fig.add_scatter(x=gx, y=gy, mode="lines", line=dict(color="rgba(255,255,255,.7)", width=3),
                     hoverinfo="skip")
-    for sgn in (-1, 1):                                        # iris bars, pupil gap centre
-        fig.add_scatter(x=[sgn * 1.5, sgn * half], y=[-acd, -acd], mode="lines",
-                        line=dict(color="#8d6e63", width=6), hoverinfo="skip")
-    lx, ly = _arc(-2.6, 2.6, -acd - 1.7, -acd)                 # crystalline lens dome
-    fig.add_scatter(x=lx, y=ly, mode="lines", line=dict(color="#c9a227", width=4),
-                    hoverinfo="skip")
-    fig.add_shape(type="line", x0=0, x1=0, y0=0, y1=-acd,      # ACD dimension
-                  line=dict(color="#2a9d8f", width=2, dash="dot"))
-    fig.add_annotation(x=0.15, y=-acd / 2, text=f"ACD {acd:.2f} mm", showarrow=False,
-                       font=dict(size=12, color="#2a9d8f"), xanchor="left",
-                       bgcolor="rgba(255,255,255,.7)")
-    fig.add_shape(type="line", x0=-half, x1=half, y0=1.35, y1=1.35,   # WTW dimension
-                  line=dict(color="#457b9d", width=2))
-    fig.add_annotation(x=0, y=1.62, text=f"WTW {wtw:.2f} mm", showarrow=False,
-                       font=dict(size=12, color="#457b9d"))
-    fig.add_annotation(x=0, y=1.02, text=t("lbl_cornea"), showarrow=False,
-                       font=dict(size=12, color="#4f8296"))
-    fig.add_annotation(x=-half + 0.2, y=-acd + 0.35, text=t("lbl_iris"), showarrow=False,
-                       font=dict(size=11, color="#8d6e63"), xanchor="left")
-    fig.add_annotation(x=0, y=-acd - 1.9, text=t("lbl_lens"), showarrow=False,
-                       font=dict(size=12, color="#a07d1e"))
-    fig.add_annotation(x=-1.55, y=-acd / 2, text=t("lbl_chamber"), showarrow=False,
-                       font=dict(size=10, color="#90a4ae"), xanchor="right")
-    fig.update_layout(height=360, margin=dict(l=0, r=0, t=6, b=0), showlegend=False,
+
+    # ciliary sulcus nodes (the ICL's natural resting shelf)
+    for sgn in (-1, 1):
+        glowing = hi("sulcus")
+        fig.add_scatter(x=[sgn * 2.9], y=[-acd], mode="markers",
+                        marker=dict(size=16 if glowing else 9,
+                                    color=PAL["glow"] if glowing else PAL["node"],
+                                    line=dict(color="white", width=1)), hoverinfo="skip")
+    return half
+
+def _eye_layout(fig: "go.Figure", half: float, height: int = 380) -> None:
+    fig.update_layout(height=height, margin=dict(l=0, r=0, t=8, b=0), showlegend=False,
+                      plot_bgcolor="#fbfdff", paper_bgcolor="#fbfdff",
                       xaxis=dict(visible=False, range=[-half - 1.2, half + 1.2]),
                       yaxis=dict(visible=False, scaleanchor="x", scaleratio=1))
+
+def anatomy_explorer(acd: float, wtw: float, highlight: str = None) -> go.Figure:
+    """Meet-Your-Eye: the patient's own anterior segment, richly rendered, with
+    the selected structure glowing. ACD/WTW shown as anatomy dimensions."""
+    fig = go.Figure()
+    half = _eye_scene(fig, acd, wtw, highlight)
+    fig.add_shape(type="line", x0=0, x1=0, y0=0, y1=-acd,
+                  line=dict(color="#2a9d8f", width=2, dash="dot"))
+    fig.add_annotation(x=0.15, y=-acd / 2, text=f"ACD {acd:.2f} mm", showarrow=False,
+                       font=dict(size=12, color="#2a7f73"), xanchor="left",
+                       bgcolor="rgba(255,255,255,.75)")
+    fig.add_shape(type="line", x0=-half, x1=half, y0=1.45, y1=1.45,
+                  line=dict(color="#457b9d", width=2))
+    fig.add_annotation(x=0, y=1.7, text=f"WTW {wtw:.2f} mm", showarrow=False,
+                       font=dict(size=12, color="#457b9d"))
+    for name, x, y, col in [("cornea", 0, 1.05, "#4f8296"),
+                            ("iris", -half + 0.3, -acd + 0.4, "#8d6e63"),
+                            ("lens", 0, -acd - 1.85, "#a07d1e"),
+                            ("sulcus", 2.9, -acd - 0.5, "#2a7f73")]:
+        fig.add_annotation(x=x, y=y, text=t("lbl_" + ("chamber" if name == "x" else name)),
+                           showarrow=False, font=dict(size=11, color=col),
+                           xanchor="left" if x < 0 else "center")
+    _eye_layout(fig, half, 380)
     return fig
 
 def pop_hist(df: pd.DataFrame, col: str, value: float, title: str, color: str) -> go.Figure:
-    """Where the patient's measurement sits within the general population range.
-    Positioning, not a suitability score or outcome."""
+    """Where the patient's measurement sits in the population range — positioning,
+    not a suitability score or outcome."""
     fig = go.Figure(go.Histogram(x=df[col], nbinsx=24, marker_color=hex_rgba(color, 0.5)))
     fig.add_shape(type="line", x0=value, x1=value, y0=0, y1=1, yref="paper",
                   line=dict(color="#111", width=3))
     fig.add_annotation(x=value, y=1.06, yref="paper", text=t("pop_you"), showarrow=False,
                        font=dict(size=12, color="#111"))
-    fig.update_layout(height=210, margin=dict(l=0, r=0, t=24, b=0), showlegend=False,
+    fig.update_layout(height=200, margin=dict(l=0, r=0, t=22, b=0), showlegend=False,
                       title=title, xaxis_title="mm", yaxis=dict(visible=False), bargap=0.05)
     return fig
 
-def gentle_landing_figure(stage: int) -> go.Figure:
-    """Schematic micro-assembly. The cornea is ALWAYS intact and labelled as never
-    cut. stage 0 tiny opening -> 1 folded lens enters -> 2 unfolds -> 3 rests
-    behind the iris. No numbers, no outcomes — pure gentle mechanics."""
-    acd = 3.0; half = 5.6; icl = "#2a9d8f"
+def _icl_polyline(t: float):
+    """Smooth path of the ICL as a function of t in [0,1]:
+    glide (folded) -> unfold -> descend & rest behind the iris."""
+    if t < 0.30:
+        f = t / 0.30; cx, cy, w = 3.9 - 2.4 * f, -1.0 - 0.6 * f, 0.55 + 0.15 * f
+    elif t < 0.62:
+        f = (t - 0.30) / 0.32; cx, cy, w = 1.5 - 1.5 * f, -1.6 - 0.1 * f, 0.70 + 1.75 * f
+    else:
+        f = (t - 0.62) / 0.38; cx, cy, w = 0.0, -1.7 - 1.45 * f, 2.45 + 0.1 * f
+    xs = np.linspace(cx - w, cx + w, 44)
+    ys = cy - 0.16 * (1 - ((xs - cx) / w) ** 2)
+    return xs, ys
+
+def _icl_stage(t: float) -> int:
+    return 0 if t < 0.28 else 1 if t < 0.60 else 2 if t < 0.88 else 3
+
+def gentle_landing_animation(n_frames: int = 42) -> go.Figure:
+    """A single smooth, auto-playing / scrubbable Plotly animation: the folded
+    ICL glides through the tiny opening, unfolds, and settles behind the iris.
+    The cornea is intact throughout and labelled 'never cut'. No numbers."""
+    acd, wtw = 3.0, 11.2
     fig = go.Figure()
-    cx, cy = _arc(-half, half, 1.2, 0.0)                       # cornea (intact)
-    fig.add_scatter(x=cx, y=cy, mode="lines", line=dict(color="#8ac6d1", width=5),
-                    hoverinfo="skip")
-    for sgn in (-1, 1):                                        # iris
-        fig.add_scatter(x=[sgn * 1.5, sgn * half], y=[-acd, -acd], mode="lines",
-                        line=dict(color="#8d6e63", width=8), hoverinfo="skip")
-    lx, ly = _arc(-2.8, 2.8, -acd - 1.8, -acd)                 # crystalline lens
-    fig.add_scatter(x=lx, y=ly, mode="lines", line=dict(color="#c9a227", width=4),
-                    hoverinfo="skip")
+    half = _eye_scene(fig, acd, wtw)
+    base = len(fig.data)
 
-    if stage == 0:                                            # tiny self-sealing opening
-        fig.add_scatter(x=[half - 0.9, half - 0.2], y=[0.55, 0.15], mode="lines",
-                        line=dict(color="#e76f51", width=5), hoverinfo="skip")
-        fig.add_annotation(x=half - 0.55, y=0.95, text=t("landing_open_tag"), showarrow=True,
-                           arrowhead=2, ax=-12, ay=-26, font=dict(size=11, color="#e76f51"))
-    elif stage == 1:                                          # folded lens enters
-        fx, fy = _arc(1.2, 2.8, -0.9, -1.5, 30)
-        fig.add_scatter(x=fx, y=fy, mode="lines", line=dict(color=icl, width=7),
-                        hoverinfo="skip")
-        fig.add_annotation(x=2.0, y=-0.5, text=t("landing_fold_tag"), showarrow=True,
-                           arrowhead=2, ax=22, ay=-22, font=dict(size=11, color=icl))
-    elif stage == 2:                                          # unfolds softly
-        ux, uy = _arc(-2.4, 2.4, -1.35, -1.85, 60)
-        fig.add_scatter(x=ux, y=uy, mode="lines", line=dict(color=icl, width=6),
-                        hoverinfo="skip")
-        fig.add_annotation(x=0, y=-1.05, text=t("landing_unfold_tag"), showarrow=False,
-                           font=dict(size=11, color=icl))
-    else:                                                     # rests behind the iris
-        rx, ry = _arc(-2.6, 2.6, -acd - 0.15, -acd - 0.5, 60)
-        fig.add_scatter(x=rx, y=ry, mode="lines", line=dict(color=icl, width=6),
-                        hoverinfo="skip")
-        fig.add_annotation(x=0, y=-acd - 0.8, text=t("landing_rest_tag"), showarrow=False,
-                           font=dict(size=12, color=icl), bgcolor="rgba(255,255,255,.7)")
+    # incision hint at the corneal edge (static)
+    fig.add_scatter(x=[half - 0.9, half - 0.2], y=[0.55, 0.15], mode="lines",
+                    line=dict(color=hex_rgba("#e76f51", 0.8), width=4), hoverinfo="skip")
 
-    fig.add_annotation(x=0, y=1.4, text="✔ " + t("cornea_intact"), showarrow=False,
+    # initial animated traces: glow, crisp lens, narration text
+    x0, y0 = _icl_polyline(0.0)
+    fig.add_scatter(x=x0, y=y0, mode="lines", line=dict(color=hex_rgba(PAL["icl"], 0.30), width=20),
+                    hoverinfo="skip")
+    fig.add_scatter(x=x0, y=y0, mode="lines", line=dict(color=PAL["icl"], width=6), hoverinfo="skip")
+    fig.add_scatter(x=[0], y=[1.78], mode="text", text=[t("landing_narr")[0]],
+                    textfont=dict(size=12, color="#2a7f73"), hoverinfo="skip")
+
+    frames = []
+    for i in range(n_frames):
+        tt = i / (n_frames - 1)
+        xs, ys = _icl_polyline(tt)
+        frames.append(go.Frame(name=str(i), traces=[base + 1, base + 2, base + 3], data=[
+            go.Scatter(x=xs, y=ys, mode="lines", line=dict(color=hex_rgba(PAL["icl"], 0.30), width=20),
+                       hoverinfo="skip"),
+            go.Scatter(x=xs, y=ys, mode="lines", line=dict(color=PAL["icl"], width=6), hoverinfo="skip"),
+            go.Scatter(x=[0], y=[1.78], mode="text", text=[t("landing_narr")[_icl_stage(tt)]],
+                       textfont=dict(size=12, color="#2a7f73"), hoverinfo="skip"),
+        ]))
+    fig.frames = frames
+
+    # persistent labels (not touched by frames)
+    fig.add_annotation(x=0, y=2.25, text="✔ " + t("cornea_intact"), showarrow=False,
                        font=dict(size=13, color="#2a9d8f"))
     fig.add_annotation(x=-half + 0.3, y=-acd + 0.4, text=t("lbl_iris"), showarrow=False,
                        font=dict(size=11, color="#8d6e63"), xanchor="left")
-    fig.add_annotation(x=0, y=-acd - 2.05, text=t("lbl_lens"), showarrow=False,
+    fig.add_annotation(x=0, y=-acd - 2.0, text=t("lbl_lens"), showarrow=False,
                        font=dict(size=11, color="#a07d1e"))
-    fig.update_layout(height=380, margin=dict(l=0, r=0, t=12, b=0), showlegend=False,
-                      transition=dict(duration=350, easing="cubic-in-out"),
-                      xaxis=dict(visible=False, range=[-half - 0.8, half + 0.8]),
-                      yaxis=dict(visible=False, scaleanchor="x", scaleratio=1))
+
+    _eye_layout(fig, half, 430)
+    fig.update_layout(
+        updatemenus=[dict(type="buttons", showactive=False, direction="left",
+                          x=0.02, y=-0.02, xanchor="left", yanchor="top",
+                          buttons=[
+                              dict(label="▶ " + t("play_word"), method="animate",
+                                   args=[None, dict(frame=dict(duration=90, redraw=True),
+                                                    fromcurrent=True,
+                                                    transition=dict(duration=60, easing="cubic-in-out"))]),
+                              dict(label="⏸", method="animate",
+                                   args=[[None], dict(frame=dict(duration=0, redraw=False),
+                                                      mode="immediate")])])],
+        sliders=[dict(active=0, x=0.14, len=0.82, y=-0.02, pad=dict(t=0),
+                      currentvalue=dict(visible=False),
+                      steps=[dict(method="animate", label="",
+                                  args=[[str(i)], dict(mode="immediate",
+                                                       frame=dict(duration=0, redraw=True),
+                                                       transition=dict(duration=0))])
+                             for i in range(n_frames)])])
     return fig
 
 
@@ -674,6 +796,11 @@ CSS = """
   margin-bottom:10px;animation:fadein .4s ease}
 .term-name{font-weight:700;margin-bottom:4px;color:#264653}
 .term-data{margin-top:6px;font-size:.86rem;color:#2a9d8f}
+@keyframes glowpulse{0%{box-shadow:0 0 6px rgba(42,157,143,.35)}50%{box-shadow:0 0 20px rgba(42,157,143,.85)}100%{box-shadow:0 0 6px rgba(42,157,143,.35)}}
+.glow-panel{border-radius:12px;padding:12px 16px;background:linear-gradient(135deg,#e7f5f1,#eef6ff);
+  border:1px solid #b7e4d3;animation:glowpulse 2.6s ease-in-out infinite;font-size:.95rem}
+.play-hint{display:inline-block;padding:6px 14px;border-radius:20px;background:#2a9d8f;color:#fff;
+  font-weight:700;animation:pulse 1.6s ease-in-out infinite}
 </style>
 """
 
@@ -871,7 +998,7 @@ def main() -> None:
         st.markdown(t("edu_persona"))
         st.write(t("edu_intro"))
 
-        # ---- A. Meet Your Eye (anatomy self-discovery, outcome-free) ----
+        # ---- A. Meet Your Eye — spotlight anatomy explorer (outcome-free) ----
         st.markdown("### " + t("meet_h"))
         c = st.columns(4)
         acd = c[0].number_input(t("acd"), 2.6, 4.2, 3.40, 0.01, help=term_help("acd"))
@@ -881,11 +1008,15 @@ def main() -> None:
         with st.expander(t("understand_terms")):
             render_glossary(df)
 
+        structs = ["cornea", "iris", "chamber", "lens", "sulcus"]
+        spot = st.radio(t("spotlight_h"), structs, horizontal=True,
+                        format_func=lambda k: t("lbl_" + k))
         left, right = st.columns([3, 2])
         with left:
-            st.markdown("#### " + t("anat_h"))
-            st.plotly_chart(anatomy_cross_section(acd, wtw), use_container_width=True)
+            st.plotly_chart(anatomy_explorer(acd, wtw, spot), use_container_width=True)
             st.caption(t("anat_caption"))
+            st.markdown(f"<div class='glow-panel'>💡 {t('fact_' + spot)}</div>",
+                        unsafe_allow_html=True)
         with right:
             st.markdown("#### " + t("pop_h"))
             st.plotly_chart(pop_hist(df, "acd", acd, t("acd"), "#2a9d8f"),
@@ -894,20 +1025,13 @@ def main() -> None:
                             use_container_width=True)
             st.info(t("pop_normal"))
 
-        # ---- B. Gentle Landing micro-assembly simulator ----
+        # ---- B. Gentle Landing — smooth frame-animated micro-assembly ----
         st.markdown("---")
         st.markdown("### " + t("landing_h"))
         st.write(t("landing_intro"))
-        names = t("landing_stage_names")
-        stage = st.select_slider(t("stage_label"), options=[0, 1, 2, 3], value=0,
-                                 format_func=lambda i: f"{i + 1}. {names[i]}")
-        lc, rc = st.columns([3, 2])
-        with lc:
-            st.plotly_chart(gentle_landing_figure(stage), use_container_width=True)
-        with rc:
-            st.markdown("#### " + names[stage])
-            st.info(t("landing_narr")[stage])
-            st.success("🛡️ " + t("cornea_intact"))
+        st.markdown(f"<span class='play-hint'>{t('play_hint')}</span>", unsafe_allow_html=True)
+        st.plotly_chart(gentle_landing_animation(), use_container_width=True)
+        st.success("🛡️ " + t("cornea_intact"))
 
         st.caption(t("compliance"))
 
