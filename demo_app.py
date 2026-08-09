@@ -15,6 +15,8 @@ Run locally:
 Trilingual: 简体中文 / English / 日本語 (switch in the sidebar).
 """
 from __future__ import annotations
+import time
+
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
@@ -357,6 +359,139 @@ T: dict[str, dict[str, str]] = {
                     "en": "The ciliary sulcus is a natural 'shelf' behind the iris where the ICL gently "
                           "rests, held by your eye's own structures.",
                     "ja": "毛様溝は虹彩の後ろの天然の「棚」で、ICL はここにそっと収まり、眼自身の構造に支えられます。"},
+    # --- Publishing Copilot (clinician) ---
+    "copilot_h": {"zh": "📝 论文选题与大纲生成（发表副驾）", "en": "📝 Publishing Copilot — topic & outline generator",
+                  "ja": "📝 論文テーマ・アウトライン生成（パブリッシング副操縦士）"},
+    "copilot_cap": {"zh": "从你的去标识病例库出发，把临床直觉快速转化为可发表的结构化框架（仅为框架，非结论）。",
+                    "en": "Turn a clinical hunch into a publishable, structured framework from your "
+                          "de-identified archive (a scaffold, not conclusions).",
+                    "ja": "非識別化アーカイブから、臨床の直感を発表可能な構造化フレームに（枠組みであり結論ではありません）。"},
+    "theme_select": {"zh": "研究主题", "en": "Research theme", "ja": "研究テーマ"},
+    "custom_title": {"zh": "自定义研究标题", "en": "Custom research title", "ja": "カスタム研究タイトル"},
+    "copilot_btn": {"zh": "✨ 生成发表框架", "en": "✨ Generate publication package", "ja": "✨ 発表パッケージを生成"},
+    "titles_h": {"zh": "推荐标题（中英对照）", "en": "Suggested titles (bilingual)", "ja": "推奨タイトル（対訳）"},
+    "outline_h": {"zh": "论文结构大纲", "en": "Paper outline", "ja": "論文アウトライン"},
+    "checklist_h": {"zh": "数据清单（对照现有病例库）", "en": "Data checklist (against your archive)",
+                    "ja": "データチェックリスト（アーカイブ照合）"},
+    "copilot_disclaimer": {"zh": "以上为写作框架，非研究结论；所有统计需在满足 k≥5 的分层上，用你的真实数据填充。",
+                           "en": "This is a writing scaffold, not findings; fill every statistic from your real "
+                                 "data on strata satisfying k≥5.",
+                           "ja": "これは執筆の枠組みであり結論ではありません。統計は k≥5 を満たす層で実データから記入してください。"},
+    "theme_label_vault_tight_sulcus": {"zh": "紧沟眼的拱高动态", "en": "Vault dynamics in tight sulci",
+                                       "ja": "狭い毛様溝でのボールト動態"},
+    "theme_label_ecd_trajectory": {"zh": "ICL 术后 ECD 纵向轨迹", "en": "Longitudinal ECD trajectory post-ICL",
+                                   "ja": "ICL 術後 ECD の経時推移"},
+    "theme_label_sizing_age": {"zh": "个性化尺寸规则的年龄分层效能",
+                               "en": "Personalized sizing efficacy across age cohorts",
+                               "ja": "年齢別の個別化サイズ規則の有効性"},
+    "theme_label_custom": {"zh": "自定义…", "en": "Custom…", "ja": "カスタム…"},
+    "theme_focus_vault_tight_sulcus": {"zh": "紧窄睫状沟眼中的拱高表现",
+                                       "en": "vault behaviour in eyes with tight ciliary sulci",
+                                       "ja": "狭い毛様溝の眼におけるボールト挙動"},
+    "theme_focus_ecd_trajectory": {"zh": "ICL 植入术后角膜内皮细胞密度的纵向轨迹",
+                                   "en": "the longitudinal endothelial cell density trajectory after ICL",
+                                   "ja": "ICL 植込み後の角膜内皮細胞密度の経時的推移"},
+    "theme_focus_sizing_age": {"zh": "个性化尺寸规则在不同年龄队列中的效能",
+                               "en": "the efficacy of personalized sizing rules across age cohorts",
+                               "ja": "年齢コホート間での個別化サイズ規則の有効性"},
+    "theme_titles_vault_tight_sulcus": {
+        "zh": ["紧窄睫状沟眼的拱高动态：一项真实世界回顾", "窄沟眼拱高预测：单中心经验"],
+        "en": ["Vault Dynamics in Eyes with Tight Ciliary Sulci: A Real-World Analysis",
+               "Predicting Vault in Narrow-Sulcus Eyes: Single-Centre Experience"],
+        "ja": ["狭い毛様溝の眼におけるボールト動態：リアルワールド回顧", "狭沟眼のボールト予測：単施設経験"]},
+    "theme_titles_ecd_trajectory": {
+        "zh": ["ICL 植入术后角膜内皮细胞密度的纵向轨迹", "ICL 术后内皮安全性：真实世界队列研究"],
+        "en": ["Longitudinal Endothelial Cell Density Trajectory Following ICL Implantation",
+               "Endothelial Safety After ICL: A Real-World Cohort Study"],
+        "ja": ["ICL 植込み後の角膜内皮細胞密度の経時推移", "ICL 術後の内皮安全性：リアルワールドコホート研究"]},
+    "theme_titles_sizing_age": {
+        "zh": ["个性化 ICL 尺寸规则在不同年龄队列中的效能", "ICL 手术中按年龄分层的尺寸优化"],
+        "en": ["Efficacy of Personalized ICL Sizing Rules Across Age Cohorts",
+               "Age-Stratified Sizing Refinement in ICL Surgery"],
+        "ja": ["年齢コホート間での個別化 ICL サイズ規則の有効性", "ICL 手術における年齢層別サイズ最適化"]},
+    "sec_abstract": {"zh": "摘要", "en": "Abstract", "ja": "抄録"},
+    "sec_background": {"zh": "引言 / 背景", "en": "Introduction / Background", "ja": "序論 / 背景"},
+    "sec_methods": {"zh": "材料与方法", "en": "Materials & Methods", "ja": "材料と方法"},
+    "sec_results": {"zh": "结果（可支持的数据点）", "en": "Results (supported data points)", "ja": "結果（対応可能なデータ）"},
+    "sec_discussion": {"zh": "讨论要点", "en": "Discussion highlights", "ja": "考察のポイント"},
+    "outline_abstract": {
+        "zh": "本研究基于 {n} 只去标识真实世界眼的回顾性队列，探讨{focus}。〔在此填写研究目的、主要终点与核心发现。〕",
+        "en": "This study examines {focus} using a retrospective, de-identified real-world cohort of {n} "
+              "eyes. [State objective, primary endpoint, and key finding.]",
+        "ja": "本研究は {n} 眼の非識別化リアルワールド回顧コホートを用い、{focus}を検討する。〔目的・主要評価項目・主要所見を記載〕"},
+    "outline_background": {
+        "zh": "ICL 尺寸选择及其结构相关性仍是活跃领域。本文聚焦{focus}。〔综述既往文献并指出本病例库可填补的空白。〕",
+        "en": "ICL sizing and its structural correlates remain active areas. This work focuses on {focus}. "
+              "[Summarise prior literature and the specific gap your archive addresses.]",
+        "ja": "ICL のサイズ選択とその構造的相関は依然活発な領域である。本稿は{focus}に焦点を当てる。〔先行文献と本アーカイブが埋める空白を記載〕"},
+    "outline_methods": {
+        "zh": "对来自单一高流量诊所的 {n} 只去标识眼进行回顾性分析；按标准化 22 字段方案提取生物测量（ACD、WTW、STS）"
+              "与器械参数；样本量低于 n={k} 的分层予以抑制（k-匿名）。〔说明纳入标准、终点与统计方法。〕",
+        "en": "Retrospective analysis of {n} de-identified eyes from a single high-volume practice. Biometry "
+              "(ACD, WTW, STS) and device parameters were extracted per a standardized 22-field schema; "
+              "strata below n={k} are suppressed for privacy (k-anonymity). [Specify inclusion criteria, "
+              "endpoints, and statistical approach.]",
+        "ja": "単一の高症例数施設の非識別化 {n} 眼を回顧的に解析。標準化 22 項目スキーマで生体計測（ACD・WTW・STS）と"
+              "デバイス情報を抽出し、n={k} 未満の層はプライバシー保護のため抑制（k-匿名性）。〔選択基準・評価項目・統計手法を記載〕"},
+    "outline_results": {
+        "zh": "本主题在现有病例库可支持的分析：目标队列 n={cn}。〔填入描述性分布、分层汇总与图表，并标注每层的确切 n。〕",
+        "en": "Analyses the archive can support for this theme: cohort of interest n={cn}. [Insert descriptive "
+              "distributions, stratified summaries, and figures; report exact n per stratum.]",
+        "ja": "本テーマで現アーカイブが対応可能な解析：対象コホート n={cn}。〔記述的分布・層別要約・図表を記入し、各層の n を明記〕"},
+    "outline_discussion": {
+        "zh": "〔鉴于观察性设计，将结果解释为关联而非因果。讨论该模式如何优化尺寸决策、单中心数据的局限，以及下一步验证。〕",
+        "en": "[Interpret findings as association, not causation, given the observational design. Discuss how "
+              "the pattern could refine sizing decisions, limits of single-centre data, and next validation "
+              "steps.]",
+        "ja": "〔観察研究であることを踏まえ、結果は因果ではなく関連として解釈。サイズ決定の改善可能性、単施設データの限界、次の検証段階を考察〕"},
+    "chk_missing": {"zh": "病例库中暂无此字段——建议开始采集", "en": "not yet in the archive — consider collecting it",
+                    "ja": "アーカイブに未収録——収集の検討を"},
+    "chk_sts": {"zh": "沟到沟 STS", "en": "Sulcus-to-sulcus (STS)", "ja": "毛様溝間 STS"},
+    "chk_size": {"zh": "选用镜片尺寸", "en": "Chosen lens size", "ja": "選択サイズ"},
+    "chk_vault": {"zh": "拱高", "en": "Vault", "ja": "ボールト"},
+    "chk_ecd_pre": {"zh": "术前内皮细胞密度", "en": "Preop endothelial cell density", "ja": "術前内皮細胞密度"},
+    "chk_ecd_post": {"zh": "术后内皮细胞密度", "en": "Postop endothelial cell density", "ja": "術後内皮細胞密度"},
+    "chk_vault_series": {"zh": "多时点拱高随访", "en": "Multi-timepoint vault follow-up", "ja": "多時点ボールト経過"},
+    "chk_age": {"zh": "年龄", "en": "Age", "ja": "年齢"},
+    "chk_acd": {"zh": "前房深度 ACD", "en": "Anterior chamber depth", "ja": "前房深度 ACD"},
+    "nomo_kanon": {"zh": "🔒 所有分层均显示 n；低于 k=5 的分层将被抑制。",
+                   "en": "🔒 Every stratum shows its n; strata below k=5 are suppressed.",
+                   "ja": "🔒 各層は n を表示し、k=5 未満の層は抑制されます。"},
+    # --- Live Case Ingestion (clinician) ---
+    "ingest_h": {"zh": "➕ 录入新病例 · 动态更新病例库", "en": "➕ Upload new case · live database updater",
+                 "ja": "➕ 新規症例の登録 · データベース動的更新"},
+    "ingest_cap": {"zh": "把每一例成功手术即时录入，本地描述性 nomogram 随即刷新。数据仅存于本次会话（演示）。",
+                   "en": "Log each successful case on the fly; the local descriptive nomogram refreshes at once. "
+                         "Data is session-only in this demo.",
+                   "ja": "成功症例をその場で登録すると、ローカルの記述的ノモグラムが即時更新されます（本デモではセッション内のみ保持）。"},
+    "f_sts": {"zh": "STS (mm)", "en": "STS (mm)", "ja": "STS (mm)"},
+    "f_acd": {"zh": "ACD (mm)", "en": "ACD (mm)", "ja": "ACD (mm)"},
+    "f_wtw": {"zh": "WTW (mm)", "en": "WTW (mm)", "ja": "WTW (mm)"},
+    "f_size": {"zh": "镜片尺寸 (mm)", "en": "Lens size (mm)", "ja": "サイズ (mm)"},
+    "f_vault": {"zh": "拱高 (µm)", "en": "Vault (µm)", "ja": "ボールト (µm)"},
+    "f_sph": {"zh": "球镜 SPH (D)", "en": "Sphere (D)", "ja": "球面度数 (D)"},
+    "ingest_add_btn": {"zh": "录入本病例", "en": "Add this case", "ja": "この症例を登録"},
+    "ingest_added_msg": {"zh": "✅ 已录入 1 例，病例库已更新。",
+                         "en": "✅ Case added — archive updated.", "ja": "✅ 1 例を登録し、アーカイブを更新しました。"},
+    "ingest_count": {"zh": "本次会话新增", "en": "Added this session", "ja": "今セッションの追加"},
+    "sync_btn": {"zh": "同步并重新校准", "en": "Sync & Recalibrate", "ja": "同期して再校正"},
+    "sync_progress": {"zh": "正在整合证据、刷新描述性 nomogram…", "en": "Integrating evidence, refreshing the "
+                      "descriptive nomogram…", "ja": "エビデンスを統合し、記述的ノモグラムを更新中…"},
+    "sync_done_msg": {"zh": "✅ 已整合 {added} 条新证据 · 病例库共 {total} 眼 · 描述性 nomogram 已刷新 · "
+                            "候选信号已浮现，等待你的确认（不自动改写已确认原则）。",
+                      "en": "✅ Integrated {added} new evidence record(s) · archive now {total} eyes · "
+                            "descriptive nomogram refreshed · a candidate signal has surfaced, awaiting your "
+                            "ratification (ratified rules are never auto-rewritten).",
+                      "ja": "✅ {added} 件の新エビデンスを統合 · アーカイブ計 {total} 眼 · 記述的ノモグラム更新 · "
+                            "候補シグナルが出現し承認待ちです（確認済み原則は自動改変されません）。"},
+    "ingest_reset": {"zh": "清除本次新增", "en": "Clear session additions", "ja": "追加分をクリア"},
+    "copilot_download": {"zh": "⬇️ 下载 Markdown 大纲", "en": "⬇️ Download Markdown outline",
+                         "ja": "⬇️ Markdown アウトラインをダウンロード"},
+    "sync_affected_h": {"zh": "受影响的生理分层（ACD）", "en": "Affected physiological band(s) (ACD)",
+                        "ja": "影響を受けた生理学的層（ACD）"},
+    "l3_candidate_updated": {"zh": "L3 候选规则已更新（待医生确认）",
+                             "en": "L3 candidate rule updated (awaiting ratification)",
+                             "ja": "L3 候補規則を更新（承認待ち）"},
 }
 
 def t(key: str) -> str:
@@ -969,6 +1104,166 @@ def render_manual_vs_ai(df: pd.DataFrame, n: int) -> None:
     st.caption("📎 " + t("cmp_anchor").format(N=N, n=n, k=k))
 
 
+# ===========================================================================
+# 5d. Publishing Copilot + Live Case Ingestion (clinician-facing, compliant)
+# ===========================================================================
+COPILOT_THEMES = ["vault_tight_sulcus", "ecd_trajectory", "sizing_age", "custom"]
+
+def get_archive(base: pd.DataFrame) -> pd.DataFrame:
+    """Base archive + any cases added live this session."""
+    added = st.session_state.get("added_cases", [])
+    if not added:
+        return base
+    return pd.concat([base, pd.DataFrame(added)], ignore_index=True)
+
+_THEME_REQUIRED = {
+    "vault_tight_sulcus": ["sts", "size", "vault"],
+    "ecd_trajectory": ["ecd_pre", "ecd_post", "vault_series"],
+    "sizing_age": ["age", "size", "vault", "sts"],
+    "custom": ["acd", "sts", "size", "vault"],
+}
+
+def _theme_cohort_n(theme: str, arch: pd.DataFrame) -> int:
+    if theme == "vault_tight_sulcus":
+        return int((arch["sts"] < 11.0).sum())
+    return len(arch)
+
+def data_checklist(theme: str, arch: pd.DataFrame):
+    """Map required data points to what the archive actually holds. k-anon gated:
+    counts below K_ANON are flagged, missing columns are shown honestly."""
+    out = []
+    for key in _THEME_REQUIRED[theme]:
+        if key in arch.columns:
+            n = int(arch[key].notna().sum())
+            status = "ok" if n >= K_ANON else "thin"
+            detail = f"n={n}" if n >= K_ANON else f"n={n} < {K_ANON}"
+        else:
+            status, detail = "missing", t("chk_missing")
+        label = t("chk_" + key) if ("chk_" + key) in T else key
+        out.append((label, status, detail))
+    return out
+
+def build_outline(theme: str, title: str, arch: pd.DataFrame) -> dict:
+    lang = st.session_state.get("lang", "en")
+    n = len(arch)
+    focus = title if theme == "custom" else t("theme_focus_" + theme)
+    cn = _theme_cohort_n(theme, arch)
+    sec = {}
+    for key in ["abstract", "background", "methods", "results", "discussion"]:
+        sec[key] = T["outline_" + key][lang].format(title=title, n=n, focus=focus,
+                                                     cn=cn, k=K_ANON)
+    return sec
+
+def build_outline_markdown(theme, local_titles, en_titles, sec, checklist) -> str:
+    """Assemble the generated package into a Markdown manuscript starter."""
+    lang = st.session_state.get("lang", "en")
+    primary = local_titles[0] if local_titles else t("custom_title")
+    lines = [f"# {primary}", "", f"## {t('titles_h')}"]
+    if en_titles and lang != "en":
+        for loc, en in zip(local_titles, en_titles):
+            lines += [f"- {loc}", f"  - *{en}*"]
+    else:
+        lines += [f"- {v}" for v in local_titles]
+    lines.append("")
+    for key in ["abstract", "background", "methods", "results", "discussion"]:
+        lines += [f"## {t('sec_' + key)}", sec[key], ""]
+    lines.append(f"## {t('checklist_h')}")
+    marks = {"ok": "[x]", "thin": "[!]", "missing": "[ ]"}
+    for label, status, detail in checklist:
+        lines.append(f"- {marks[status]} {label} — {detail}")
+    lines += ["", f"> {t('copilot_disclaimer')}"]
+    return "\n".join(lines)
+
+def render_publishing_copilot(arch: pd.DataFrame) -> None:
+    st.markdown("### " + t("copilot_h"))
+    st.caption(t("copilot_cap"))
+    theme = st.selectbox(t("theme_select"), COPILOT_THEMES,
+                         format_func=lambda k: t("theme_label_" + k))
+    custom = st.text_input(t("custom_title")) if theme == "custom" else ""
+    if st.button(t("copilot_btn"), type="primary"):
+        if theme == "custom":
+            local_titles = [custom.strip()] if custom.strip() else []
+            en_titles = []
+        else:
+            local_titles = t("theme_titles_" + theme)
+            en_titles = T["theme_titles_" + theme]["en"]   # SCI-grade English, always
+        title = (local_titles[0] if local_titles else custom) or t("custom_title")
+        sec = build_outline(theme, title, arch)
+        checklist = data_checklist(theme, arch)
+        st.session_state["copilot_pkg"] = dict(
+            theme=theme, local=local_titles, en=en_titles, sec=sec, checklist=checklist,
+            md=build_outline_markdown(theme, local_titles, en_titles, sec, checklist))
+
+    pkg = st.session_state.get("copilot_pkg")
+    if pkg:
+        lang = st.session_state.get("lang", "en")
+        st.markdown("#### " + t("titles_h"))
+        if pkg["en"] and lang != "en":                    # dual-language: local + English SCI
+            for loc, en in zip(pkg["local"], pkg["en"]):
+                st.markdown(f"- **{loc}**  \n  <span style='color:#5a7d8c'>*{en}*</span>",
+                            unsafe_allow_html=True)
+        else:
+            for v in pkg["local"]:
+                st.markdown(f"- **{v}**")
+
+        st.markdown("#### " + t("outline_h"))
+        for key in ["abstract", "background", "methods", "results", "discussion"]:
+            with st.expander(t("sec_" + key)):
+                st.write(pkg["sec"][key])
+
+        st.markdown("#### " + t("checklist_h"))
+        icons = {"ok": "✅", "thin": "⚠️", "missing": "❌"}
+        for label, status, detail in pkg["checklist"]:
+            st.markdown(f"{icons[status]} **{label}** — {detail}")
+
+        st.download_button("⬇️ " + t("copilot_download"), data=pkg["md"],
+                           file_name=f"outline_{pkg['theme']}.md", mime="text/markdown")
+        st.caption(t("copilot_disclaimer"))
+
+def render_case_ingestion(base: pd.DataFrame) -> None:
+    st.markdown("### " + t("ingest_h"))
+    st.caption(t("ingest_cap"))
+    with st.form("new_case", clear_on_submit=True):
+        a = st.columns(3)
+        sts = a[0].number_input(t("f_sts"), 10.0, 13.5, 11.90, 0.01)
+        acd = a[1].number_input(t("f_acd"), 2.5, 4.5, 3.30, 0.01)
+        wtw = a[2].number_input(t("f_wtw"), 10.0, 13.5, 11.80, 0.01)
+        b = st.columns(3)
+        size = b[0].selectbox(t("f_size"), [12.1, 12.6, 13.2, 13.7], index=2)
+        vault = b[1].number_input(t("f_vault"), 100, 1200, 480, 10)
+        sph = b[2].number_input(t("f_sph"), -25.0, -1.0, -8.00, 0.25)
+        submitted = st.form_submit_button("➕ " + t("ingest_add_btn"))
+    if submitted:
+        st.session_state.setdefault("added_cases", []).append({
+            "acd": acd, "wtw": wtw, "sts": sts, "sph": sph, "age": 30,
+            "ref_size": _reference_size(sts), "size": float(size),
+            "vault": int(vault), "bcva_final": 1.05})
+        st.success(t("ingest_added_msg"))
+
+    added = st.session_state.get("added_cases", [])
+    m = st.columns([2, 1, 1])
+    m[0].metric(t("ingest_count"), len(added))
+    if m[1].button("🔄 " + t("sync_btn")):
+        with st.spinner(t("sync_progress")):
+            pb = st.progress(0)
+            for i in range(1, 6):
+                time.sleep(0.18)
+                pb.progress(i / 5)
+        arch = get_archive(base)
+        st.success(t("sync_done_msg").format(total=len(arch), added=len(added)))
+        if added:
+            base_bands = base["acd"].apply(_band_label)
+            arch_bands = arch["acd"].apply(_band_label)
+            band_key = lambda b: -9e9 if "∞" in b.split(",")[0] else float(b.split(",")[0].strip("[ "))
+            st.markdown("**" + t("sync_affected_h") + "**")
+            for band in sorted({_band_label(c["acd"]) for c in added}, key=band_key):
+                before = int((base_bands == band).sum())
+                after = int((arch_bands == band).sum())
+                st.markdown(f"- `{band} mm` · n {before} → {after} · {t('l3_candidate_updated')}")
+    if added and m[2].button("↺ " + t("ingest_reset")):
+        st.session_state["added_cases"] = []
+
+
 def main() -> None:
     st.set_page_config(page_title="Liu's Digital Brain", page_icon="🧠", layout="wide")
     st.markdown(CSS, unsafe_allow_html=True)
@@ -1038,25 +1333,32 @@ def main() -> None:
     # ---------------- Tab 2: Academic & Clinical Intelligence ----------------
     with tab2:
         st.subheader(t("t2_head"))
+        arch = get_archive(df)          # base archive + cases added live this session
         st.markdown("### " + t("t2_research_h"))
         st.caption(t("t2_research_cap"))
         if st.button(t("t2_research_btn"), type="primary"):
-            for i, topic in enumerate(research_topics(df), 1):
+            for i, topic in enumerate(research_topics(arch), 1):
                 st.markdown(f"**{i}.** {topic}")
 
         st.markdown("---")
         st.markdown("### " + t("t2_nomo_h"))
         st.caption(t("t2_nomo_cap"))
-        nomo = build_nomogram(df)
+        nomo = build_nomogram(arch)
         disp = nomo.copy()
         disp["delta"] = disp["delta"].apply(lambda x: f"{x:+.2f} mm")
         disp.columns = t("t2_nomo_cols")
         st.dataframe(disp, use_container_width=True, hide_index=True)
+        st.caption(t("nomo_kanon"))
 
-        deep_n = int((df["acd"] >= 3.3).sum())
+        deep_n = int((arch["acd"] >= 3.3).sum())
         st.markdown(badge("observed", deep_n) + "  ·  " + f"*{t('badge_descriptive')}*")
         st.success(t("t2_nomo_insight").format(n=deep_n))
         st.caption("🔒 " + t("t2_await"))
+
+        st.markdown("---")
+        render_case_ingestion(df)       # + Upload New Case · live recalibration
+        st.markdown("---")
+        render_publishing_copilot(arch)  # Publishing Copilot
 
     # ---------------- Tab 3: Partner / Supplier ----------------
     with tab3:
