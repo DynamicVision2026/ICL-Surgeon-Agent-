@@ -492,6 +492,79 @@ T: dict[str, dict[str, str]] = {
     "l3_candidate_updated": {"zh": "L3 候选规则已更新（待医生确认）",
                              "en": "L3 candidate rule updated (awaiting ratification)",
                              "ja": "L3 候補規則を更新（承認待ち）"},
+    # --- Tab 4: Daily Command Center ---
+    "tab4": {"zh": "④ 指挥中心", "en": "④ Command Center", "ja": "④ コマンドセンター"},
+    "cc_head": {"zh": "每日临床指挥中心", "en": "Daily clinical command center",
+                "ja": "デイリー臨床コマンドセンター"},
+    "cc_cap": {"zh": "术前将每台手术的生物测量与本地 nomogram 对照，给出邻域先例与置信度——均为描述性参考，"
+                     "最终决策由术者做出。",
+               "en": "Each scheduled case's biometry is checked against the local nomogram, surfacing "
+                     "neighbourhood precedents and confidence — descriptive reference only; the surgeon "
+                     "makes every decision.",
+               "ja": "予定手術ごとに生体計測を本地ノモグラムと照合し、近傍の先例と信頼度を提示します——"
+                     "記述的な参考であり、判断はすべて術者が行います。"},
+    "cc_total": {"zh": "今日手术", "en": "Today's cases", "ja": "本日の症例"},
+    "cc_ready": {"zh": "就绪", "en": "Ready", "ja": "準備完了"},
+    "cc_attention": {"zh": "需关注", "en": "Needs attention", "ja": "要確認"},
+    "cc_list_h": {"zh": "今日手术清单与预分析", "en": "Today's surgical list & pre-analysis",
+                  "ja": "本日の手術リストと事前分析"},
+    "cc_biometry": {"zh": "生物测量", "en": "Biometry", "ja": "生体計測"},
+    "cc_preanalysis": {"zh": "预分析", "en": "Pre-analysis", "ja": "事前分析"},
+    "cc_flags": {"zh": "审核标记", "en": "Audit flags", "ja": "監査フラグ"},
+    "cc_ref": {"zh": "参考尺寸（描述性基线）：{size} mm", "en": "Reference size (descriptive baseline): {size} mm",
+               "ja": "参照サイズ（記述的基準）：{size} mm"},
+    "cc_neigh_n": {"zh": "相似历史病例：n={n}", "en": "Similar historical cases: n={n}",
+                   "ja": "類似症例：n={n}"},
+    "cc_neigh_modal": {"zh": "最常选用尺寸：{size} mm", "en": "Most-chosen size: {size} mm",
+                       "ja": "最頻サイズ：{size} mm"},
+    "cc_neigh_vault": {"zh": "相似病例拱高中位：{v} µm（描述性）",
+                       "en": "Median vault in similar cases: {v} µm (descriptive)",
+                       "ja": "類似症例のボールト中央値：{v} µm（記述的）"},
+    "cc_neigh_suppressed": {"zh": "先例过少（n<{k}），已抑制描述性统计。",
+                            "en": "Too few precedents (n<{k}); descriptive stats suppressed.",
+                            "ja": "先例が少なく（n<{k}）、記述統計を抑制。"},
+    "cc_need_data": {"zh": "补齐数据后可进行邻域分析。", "en": "Complete the data to run neighbourhood analysis.",
+                     "ja": "データを補完すると近傍分析が可能です。"},
+    "cc_ready_msg": {"zh": "✓ 数据完整，无异常标记", "en": "✓ Complete data, no flags",
+                     "ja": "✓ データ完備・フラグなし"},
+    "cc_flag_missing": {"zh": "缺少 {field} —— 请在进入手术室前采集。", "en": "Missing {field} — capture before the OR.",
+                        "ja": "{field} が欠落——手術室に入る前に取得してください。"},
+    "cc_edge_tight_sts": {"zh": "睫状沟偏紧（STS<11.0mm）——历史先例较少，尺寸选择请谨慎。",
+                          "en": "Tight ciliary sulcus (STS<11.0 mm) — limited precedent; size with care.",
+                          "ja": "毛様溝が狭い（STS<11.0mm）——先例が少なく、サイズ選択に注意。"},
+    "cc_edge_deep_acd": {"zh": "前房较深（ACD>3.7mm）——请核对尺寸邻域。",
+                         "en": "Deep anterior chamber (ACD>3.7 mm) — review the sizing neighbourhood.",
+                         "ja": "前房が深い（ACD>3.7mm）——サイズ近傍を確認。"},
+    "cc_edge_shallow_acd": {"zh": "前房较浅（ACD<2.9mm）——请谨慎评估。",
+                            "en": "Shallow anterior chamber (ACD<2.9 mm) — assess with care.",
+                            "ja": "前房が浅い（ACD<2.9mm）——慎重に評価。"},
+    "cc_edge_high_myopia": {"zh": "高度近视（SPH≤−12D）——请核对度数与尺寸。",
+                            "en": "High myopia (SPH≤−12 D) — verify power and sizing.",
+                            "ja": "強度近視（SPH≤−12D）——度数とサイズを確認。"},
+    "cc_edge_sparse": {"zh": "相似历史病例过少——本例先例稀疏，需额外谨慎。",
+                       "en": "Very few similar historical cases — sparse precedent; extra caution warranted.",
+                       "ja": "類似症例が非常に少なく先例が乏しい——追加の注意が必要。"},
+    "conf_high": {"zh": "高置信", "en": "High confidence", "ja": "高信頼"},
+    "conf_med": {"zh": "中等置信", "en": "Medium confidence", "ja": "中程度"},
+    "conf_sparse": {"zh": "先例稀疏", "en": "Sparse precedent", "ja": "先例少"},
+    "cc_kanon_note": {"zh": "所有邻域统计均满足 k≥5；先例过少的分层予以抑制。均为描述性参考。",
+                      "en": "All neighbourhood stats satisfy k≥5; sparse strata are suppressed. Descriptive reference only.",
+                      "ja": "近傍統計はすべて k≥5 を満たし、先例の少ない層は抑制。記述的参考のみです。"},
+    "cc_postop_h": {"zh": "术后回填 · 保持 L3 反馈闭环", "en": "Post-op capture · keep the L3 loop alive",
+                    "ja": "術後入力 · L3ループを維持"},
+    "cc_postop_cap": {"zh": "手术结束即录入实测拱高与所选尺寸，直接汇入实时病例库。已去标识化。",
+                      "en": "Log the achieved vault and chosen size right after surgery — it flows straight "
+                            "into the live archive. De-identified.",
+                      "ja": "術直後に実測ボールトと選択サイズを入力すると、ライブアーカイブに直接反映されます。非識別化済み。"},
+    "cc_postop_case": {"zh": "选择今日病例", "en": "Select today's case", "ja": "本日の症例を選択"},
+    "cc_postop_btn": {"zh": "回填并同步", "en": "Log & sync", "ja": "入力して同期"},
+    "cc_postop_done": {"zh": "✅ 已回填 {code} 的术后数据，病例库已更新。",
+                       "en": "✅ Logged post-op data for {code} — archive updated.",
+                       "ja": "✅ {code} の術後データを入力し、アーカイブを更新しました。"},
+    "cc_postop_note": {"zh": "🧠 本例作为 L3 候选证据加入，等待术者确认后方可升级为处方性原则。",
+                       "en": "🧠 Added as L3 candidate evidence — becomes a prescriptive principle only after "
+                             "the surgeon ratifies it.",
+                       "ja": "🧠 L3 候補エビデンスとして追加。術者の承認後に処方的原則となります。"},
 }
 
 def t(key: str) -> str:
@@ -1264,6 +1337,137 @@ def render_case_ingestion(base: pd.DataFrame) -> None:
         st.session_state["added_cases"] = []
 
 
+# ===========================================================================
+# Daily Workflow Command Center (clinician / Departmental OS)
+# Strictly descriptive, k-anonymity gated. Embeds the agent in the daily rhythm.
+# ===========================================================================
+CC_REQUIRED = ["sts", "acd", "wtw", "sph"]
+_CONF_STYLE = {"high": ("#d8f3dc", "#1b4332"), "med": ("#fff3cd", "#7a5b00"),
+               "sparse": ("#fde0e3", "#7f1d1d")}
+
+@st.cache_data
+def todays_roster() -> list:
+    """Simulated daily OR roster. Anonymous codes only — no patient identity.
+    A few cases carry missing fields / edge biometry to exercise the audits."""
+    return [
+        {"code": "OR-01", "sts": 11.9, "acd": 3.30, "wtw": 11.8, "sph": -8.0, "age": 31},
+        {"code": "OR-02", "sts": None, "acd": 3.20, "wtw": 11.6, "sph": -6.5, "age": 28},
+        {"code": "OR-03", "sts": 10.7, "acd": 3.55, "wtw": 11.0, "sph": -14.0, "age": 42},
+        {"code": "OR-04", "sts": 12.6, "acd": 3.92, "wtw": 12.5, "sph": -9.0, "age": 37},
+        {"code": "OR-05", "sts": 12.0, "acd": 3.25, "wtw": 11.9, "sph": -7.5, "age": 33},
+        {"code": "OR-06", "sts": 11.4, "acd": 2.82, "wtw": 11.3, "sph": -18.0, "age": 46},
+    ]
+
+def analyze_case(case: dict, arch: pd.DataFrame) -> dict:
+    """Descriptive pre-analysis: reference size, neighbourhood precedent (k-anon
+    gated), a confidence indicator, and completeness / edge-case flags."""
+    missing = [f for f in CC_REQUIRED if case.get(f) is None]
+    flags = [("missing", f) for f in missing]
+    for key, cond in [("tight_sts", case.get("sts") is not None and case["sts"] < 11.0),
+                      ("deep_acd", case.get("acd") is not None and case["acd"] > 3.7),
+                      ("shallow_acd", case.get("acd") is not None and case["acd"] < 2.9),
+                      ("high_myopia", case.get("sph") is not None and case["sph"] <= -12.0)]:
+        if cond:
+            flags.append(("edge", key))
+
+    ref = _reference_size(case["sts"]) if case.get("sts") is not None else None
+    neigh = None
+    if not missing:
+        query = {f: case[f] for f in KNN_FEATURES}
+        cohort, _, _ = cohort_within(arch, query, radius=1.2)
+        n = len(cohort)
+        if n >= K_ANON:
+            neigh = {"n": n, "modal": cohort["size"].mode().iloc[0],
+                     "vault_med": int(cohort["vault"].median()),
+                     "conf": "high" if n >= 25 else "med"}
+        else:
+            neigh = {"n": n, "modal": None, "vault_med": None, "conf": "sparse"}
+            flags.append(("edge", "sparse"))
+    return {"missing": missing, "flags": flags, "ref": ref, "neigh": neigh}
+
+def _conf_badge(conf: str) -> str:
+    bg, fg = _CONF_STYLE[conf]
+    return (f"<span style='background:{bg};color:{fg};padding:2px 10px;border-radius:12px;"
+            f"font-size:.8rem;font-weight:700'>{t('conf_' + conf)}</span>")
+
+def _cc_field(f: str) -> str:
+    return {"sts": "STS", "acd": "ACD", "wtw": "WTW", "sph": "SPH"}[f]
+
+def render_command_center(df: pd.DataFrame) -> None:
+    st.subheader(t("cc_head"))
+    st.caption(t("cc_cap"))
+    arch = get_archive(df)
+    roster = todays_roster()
+    analyses = [analyze_case(c, arch) for c in roster]
+    ready = sum(1 for a in analyses if not a["flags"])
+
+    m = st.columns(3)
+    m[0].metric(t("cc_total"), len(roster))
+    m[1].metric(t("cc_ready"), ready)
+    m[2].metric(t("cc_attention"), len(roster) - ready)
+
+    st.markdown("### " + t("cc_list_h"))
+    for case, a in zip(roster, analyses):
+        icon = "🟢" if not a["flags"] else ("🔴" if a["missing"] else "🟡")
+        with st.expander(f"{icon}  {case['code']}", expanded=bool(a["flags"])):
+            cc = st.columns([2, 2, 3])
+            with cc[0]:
+                st.markdown("**" + t("cc_biometry") + "**")
+                for f in CC_REQUIRED:
+                    v = case.get(f)
+                    st.markdown(f"- {_cc_field(f)}: {'—' if v is None else f'{v:g}'}")
+            with cc[1]:
+                st.markdown("**" + t("cc_preanalysis") + "**")
+                if a["ref"] is not None:
+                    st.markdown(t("cc_ref").format(size=f"{a['ref']:g}"))
+                if a["neigh"] is not None:
+                    nb = a["neigh"]
+                    st.markdown(t("cc_neigh_n").format(n=nb["n"]) + "  " + _conf_badge(nb["conf"]),
+                                unsafe_allow_html=True)
+                    if nb["modal"] is not None:
+                        st.markdown(t("cc_neigh_modal").format(size=f"{nb['modal']:g}"))
+                        st.markdown(t("cc_neigh_vault").format(v=nb["vault_med"]))
+                    else:
+                        st.caption(t("cc_neigh_suppressed").format(k=K_ANON))
+                else:
+                    st.caption(t("cc_need_data"))
+            with cc[2]:
+                st.markdown("**" + t("cc_flags") + "**")
+                if not a["flags"]:
+                    st.success(t("cc_ready_msg"))
+                for typ, val in a["flags"]:
+                    if typ == "missing":
+                        st.error(t("cc_flag_missing").format(field=_cc_field(val)))
+                    else:
+                        st.warning(t("cc_edge_" + val))
+    st.caption("🔒 " + t("cc_kanon_note"))
+
+    # ---- Frictionless post-op loop -> live ingestion engine ----
+    st.markdown("---")
+    st.markdown("### " + t("cc_postop_h"))
+    st.caption(t("cc_postop_cap"))
+    codes = [c["code"] for c in roster]
+    with st.form("postop_capture"):
+        pc = st.columns(3)
+        sel = pc[0].selectbox(t("cc_postop_case"), codes)
+        size = pc[1].selectbox(t("f_size"), [12.1, 12.6, 13.2, 13.7], index=2)
+        vault = pc[2].number_input(t("f_vault"), 100, 1200, 480, 10)
+        logged = st.form_submit_button("✅ " + t("cc_postop_btn"))
+    if logged:
+        case = next(c for c in roster if c["code"] == sel)
+        rec = {"acd": case.get("acd") or 3.2, "wtw": case.get("wtw") or 11.7,
+               "sts": case.get("sts") or 11.9, "sph": case.get("sph") or -8.0,
+               "age": case.get("age") or 32, "ref_size": _reference_size(case.get("sts") or 11.9),
+               "size": float(size), "vault": int(vault), "bcva_final": 1.05}
+        band = _band_label(rec["acd"])
+        before = int((get_archive(df)["acd"].apply(_band_label) == band).sum())
+        st.session_state.setdefault("added_cases", []).append(rec)
+        after = int((get_archive(df)["acd"].apply(_band_label) == band).sum())
+        st.success(t("cc_postop_done").format(code=sel))
+        st.markdown(f"- `{band} mm` · n {before} → {after} · {t('l3_candidate_updated')}")
+        st.caption(t("cc_postop_note"))
+
+
 def main() -> None:
     st.set_page_config(page_title="Liu's Digital Brain", page_icon="🧠", layout="wide")
     st.markdown(CSS, unsafe_allow_html=True)
@@ -1285,7 +1489,7 @@ def main() -> None:
     st.title("🧠 " + t("app_title"))
     st.caption(t("tagline"))
 
-    tab1, tab2, tab3 = st.tabs([t("tab1"), t("tab2"), t("tab3")])
+    tab1, tab2, tab3, tab4 = st.tabs([t("tab1"), t("tab2"), t("tab3"), t("tab4")])
 
     # ---------------- Tab 1: Patient Trust & Education ----------------
     with tab1:
@@ -1383,6 +1587,10 @@ def main() -> None:
         st.markdown("---")
         st.markdown("#### " + t("t3_priv_h"))
         st.info(t("t3_priv_txt"))
+
+    # ---------------- Tab 4: Daily Command Center ----------------
+    with tab4:
+        render_command_center(df)
 
 
 if __name__ == "__main__":
