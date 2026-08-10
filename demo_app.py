@@ -1,11 +1,11 @@
 """
-Liu's Digital Brain — Local-First Demo App
+Surgeon's Digital Brain — Local-First Demo App
 ==========================================
 A leadership-facing demonstration of the eye-clinic intelligence + digital-asset
 system, built on the three-layer spine (Facts -> Judgments -> Principles).
 
 Local-first: runs entirely on the doctor's machine. The historical case data
-here is SYNTHETIC demo data standing in for Prof. Liu's de-identified archive —
+here is SYNTHETIC demo data standing in for Surgeon's de-identified archive —
 no real patient records are used in this demo.
 
 Run locally:
@@ -28,8 +28,8 @@ import streamlit as st
 LANGS = {"简体中文": "zh", "English": "en", "日本語": "ja"}
 
 T: dict[str, dict[str, str]] = {
-    "app_title": {"zh": "刘教授的数字大脑", "en": "Prof. Liu's Digital Brain",
-                  "ja": "劉教授のデジタルブレイン"},
+    "app_title": {"zh": "手术医生的数字大脑", "en": "Surgeon's Digital Brain",
+                  "ja": "手術医師のデジタルブレイン"},
     "tagline": {"zh": "将顶尖临床经验沉淀为可查询、可传承的数字资产",
                 "en": "Distilling elite clinical know-how into a queryable, portable digital asset",
                 "ja": "卓越した臨床ノウハウを検索可能で継承可能なデジタル資産へ"},
@@ -49,11 +49,11 @@ T: dict[str, dict[str, str]] = {
     "t1_head": {"zh": "术前咨询：为这只眼睛匹配相似的历史病例",
                 "en": "Pre-op consult: match this eye to similar historical cases",
                 "ja": "術前相談：この眼に類似する過去症例をマッチング"},
-    "t1_intro": {"zh": "输入患者生物测量参数，系统即时检索刘教授历史病例中最相似的眼睛，"
+    "t1_intro": {"zh": "输入患者生物测量参数，系统即时检索手术医生历史病例中最相似的眼睛，"
                        "用真实数据建立信任与合理预期。",
                  "en": "Enter the patient's biometry; the system instantly retrieves the most "
-                       "similar eyes from Prof. Liu's history to build trust and set expectations.",
-                 "ja": "患者の生体計測値を入力すると、劉教授の症例から最も類似した眼を即時に検索し、"
+                       "similar eyes from Surgeon's history to build trust and set expectations.",
+                 "ja": "患者の生体計測値を入力すると、手術医師の症例から最も類似した眼を即時に検索し、"
                        "信頼と適切な期待を築きます。"},
     "acd": {"zh": "前房深度 ACD (mm)", "en": "Anterior chamber depth ACD (mm)",
             "ja": "前房深度 ACD (mm)"},
@@ -81,12 +81,12 @@ T: dict[str, dict[str, str]] = {
                        "ja": "上面＝ICL後面、下面＝水晶体前面。その間隙がボールトです。"},
     "t1_insight": {"zh": "洞见", "en": "Insight", "ja": "インサイト"},
     "t1_insight_txt": {
-        "zh": "在与本眼高度相似的 {n} 只历史眼中，刘教授最常选择 {size} mm，术后拱高中位 {v} µm，"
+        "zh": "在与本眼高度相似的 {n} 只历史眼中，手术医生最常选择 {size} mm，术后拱高中位 {v} µm，"
               "落在理想安全区间。这为患者提供了以真实经验为依据的可靠预期。",
-        "en": "Across {n} highly similar historical eyes, Prof. Liu most often chose {size} mm, "
+        "en": "Across {n} highly similar historical eyes, Surgeon most often chose {size} mm, "
               "with a median post-op vault of {v} µm — within the ideal safety window. This gives "
               "the patient expectations grounded in real experience.",
-        "ja": "本眼に酷似する {n} 眼の履歴では、劉教授は {size} mm を最も多く選択し、術後ボールト中央値は "
+        "ja": "本眼に酷似する {n} 眼の履歴では、手術医師は {size} mm を最も多く選択し、術後ボールト中央値は "
               "{v} µm と理想的な安全域内でした。実際の経験に基づく信頼できる予測を患者に提供します。"},
     "t1_table_cols": {"zh": ["病例", "ACD", "WTW", "STS", "SPH", "选用尺寸", "拱高µm"],
                       "en": ["Case", "ACD", "WTW", "STS", "SPH", "Size", "Vault µm"],
@@ -104,21 +104,21 @@ T: dict[str, dict[str, str]] = {
     "t2_nomo_h": {"zh": "个人 Nomogram 决策看板（描述性）",
                   "en": "Personal Nomogram decision dashboard (descriptive)",
                   "ja": "個人ノモグラム意思決定ダッシュボード（記述的）"},
-    "t2_nomo_cap": {"zh": "按前房深度分层，展示刘教授的实际选择倾向。此为“描述其既往行为”，"
+    "t2_nomo_cap": {"zh": "按前房深度分层，展示手术医生的实际选择倾向。此为“描述其既往行为”，"
                           "经本人确认后方可升级为处方性原则。",
-                    "en": "Stratified by ACD, showing Prof. Liu's actual choice tendency. This is "
+                    "en": "Stratified by ACD, showing Surgeon's actual choice tendency. This is "
                           "DESCRIPTIVE (what was done); it becomes prescriptive only once he ratifies it.",
-                    "ja": "前房深度で層別化し、劉教授の実際の選択傾向を表示。これは記述的（過去の行動）であり、"
+                    "ja": "前房深度で層別化し、手術医師の実際の選択傾向を表示。これは記述的（過去の行動）であり、"
                           "本人の承認を経て初めて処方的原則になります。"},
     "t2_nomo_cols": {"zh": ["ACD 区间", "病例数", "最常尺寸", "相对参考的平均偏移", "平均拱高µm"],
                      "en": ["ACD band", "n", "Modal size", "Mean Δ vs reference", "Mean vault µm"],
                      "ja": ["ACD 区間", "症例数", "最頻サイズ", "参照との平均偏差", "平均ボールトµm"]},
     "t2_nomo_insight": {
-        "zh": "已识别的签名倾向：当 ACD ≥ 3.3 mm 时，刘教授倾向比参考尺寸上调一档 —— "
+        "zh": "已识别的签名倾向：当 ACD ≥ 3.3 mm 时，手术医生倾向比参考尺寸上调一档 —— "
               "此模式已在 {n} 例中观察到，等待本人确认。",
-        "en": "Detected signature tendency: when ACD ≥ 3.3 mm, Prof. Liu tends to upsize one step "
+        "en": "Detected signature tendency: when ACD ≥ 3.3 mm, Surgeon tends to upsize one step "
               "vs. the reference — observed in {n} cases, awaiting his ratification.",
-        "ja": "検出された署名的傾向：ACD ≥ 3.3 mm のとき、劉教授は参照より一段大きいサイズを選ぶ傾向 —— "
+        "ja": "検出された署名的傾向：ACD ≥ 3.3 mm のとき、手術医師は参照より一段大きいサイズを選ぶ傾向 —— "
               "{n} 例で観察され、本人の承認待ちです。"},
     "t2_await": {"zh": "候选原则 · 待医生确认", "en": "Candidate principle · awaiting ratification",
                  "ja": "候補原則 · 承認待ち"},
@@ -160,13 +160,13 @@ T: dict[str, dict[str, str]] = {
                      "en": "De-identified RWD summary generated (demo). All slices satisfy k≥5.",
                      "ja": "非識別化RWD集計を生成しました（デモ）。全スライスが k≥5 を満たします。"},
     # --- persona / provenance / compliance ---
-    "persona": {"zh": "🎓 刘教授的数字学者：只引用刘教授本人的病例数据，绝不臆测。",
-                "en": "🎓 Prof. Liu's Digital Scholar: cites only Prof. Liu's own case records — never speculates.",
-                "ja": "🎓 劉教授のデジタル学者：劉教授自身の症例のみを引用し、推測は一切しません。"},
-    "badge_observed": {"zh": "📎 刘教授病例中观察到", "en": "📎 observed in Prof. Liu's records",
-                       "ja": "📎 劉教授の症例で観察"},
-    "badge_ratified": {"zh": "✅ 刘教授已确认的原则", "en": "✅ Prof. Liu's ratified principle",
-                       "ja": "✅ 劉教授が承認した原則"},
+    "persona": {"zh": "🎓 手术医生的数字学者：只引用手术医生本人的病例数据，绝不臆测。",
+                "en": "🎓 Surgeon's Digital Scholar: cites only Surgeon's own case records — never speculates.",
+                "ja": "🎓 手術医師のデジタル学者：手術医師自身の症例のみを引用し、推測は一切しません。"},
+    "badge_observed": {"zh": "📎 手术医生病例中观察到", "en": "📎 observed in Surgeon's records",
+                       "ja": "📎 手術医師の症例で観察"},
+    "badge_ratified": {"zh": "✅ 手术医生已确认的原则", "en": "✅ Surgeon's ratified principle",
+                       "ja": "✅ 手術医師が承認した原則"},
     "badge_descriptive": {"zh": "描述性 · 待确认", "en": "descriptive · awaiting ratification",
                           "ja": "記述的 · 承認待ち"},
     "compliance": {"zh": "⚕️ 本工具用于科普与预期沟通，不构成诊断或个体化医疗建议；结果为“相似眼的既往表现”，"
@@ -180,16 +180,16 @@ T: dict[str, dict[str, str]] = {
     "tightness": {"zh": "相似度严格程度（越严越像本眼）", "en": "Similarity tightness (stricter = more alike)",
                   "ja": "類似度の厳しさ（厳しいほど本眼に近い）"},
     "meter_label": {"zh": "相似病例数", "en": "Similar cases", "ja": "類似症例数"},
-    "cohort_ok": {"zh": "在刘教授病例中找到 **{n}** 只与本眼高度相似的眼。",
-                  "en": "Found **{n}** eyes in Prof. Liu's records highly similar to this one.",
-                  "ja": "劉教授の症例に、本眼に酷似する眼が **{n}** 眼見つかりました。"},
-    "cohort_thin": {"zh": "⚠️ 刘教授病例中相似的眼过少（n={n} < {k}），不足以在此可靠陈述。请放宽相似度或调整参数。",
-                    "en": "⚠️ Too few similar eyes in Prof. Liu's records (n={n} < {k}) to speak confidently "
+    "cohort_ok": {"zh": "在手术医生病例中找到 **{n}** 只与本眼高度相似的眼。",
+                  "en": "Found **{n}** eyes in Surgeon's records highly similar to this one.",
+                  "ja": "手術医師の症例に、本眼に酷似する眼が **{n}** 眼見つかりました。"},
+    "cohort_thin": {"zh": "⚠️ 手术医生病例中相似的眼过少（n={n} < {k}），不足以在此可靠陈述。请放宽相似度或调整参数。",
+                    "en": "⚠️ Too few similar eyes in Surgeon's records (n={n} < {k}) to speak confidently "
                           "here. Loosen the similarity or adjust the parameters.",
-                    "ja": "⚠️ 劉教授の症例に類似する眼が少なすぎます（n={n} < {k}）。確信を持って述べられません。"
+                    "ja": "⚠️ 手術医師の症例に類似する眼が少なすぎます（n={n} < {k}）。確信を持って述べられません。"
                           "類似度を緩めるかパラメータを調整してください。"},
-    "scatter_title": {"zh": "「你在这里」：本眼在刘教授病例中的位置", "en": "\"You are here\": this eye among Prof. Liu's cases",
-                      "ja": "「あなたはここ」：劉教授の症例における本眼の位置"},
+    "scatter_title": {"zh": "「你在这里」：本眼在手术医生病例中的位置", "en": "\"You are here\": this eye among Surgeon's cases",
+                      "ja": "「あなたはここ」：手術医師の症例における本眼の位置"},
     "scatter_you": {"zh": "本眼", "en": "This eye", "ja": "本眼"},
     "scatter_cohort": {"zh": "相似队列", "en": "Similar cohort", "ja": "類似コホート"},
     "scatter_other": {"zh": "其他病例", "en": "Other cases", "ja": "その他の症例"},
@@ -212,9 +212,9 @@ T: dict[str, dict[str, str]] = {
                  "ja": "過去のエキスパート症例マッチング"},
     "plain_label": {"zh": "通俗解释：", "en": "In plain terms:", "ja": "かんたんに言うと："},
     "why_label": {"zh": "为何重要：", "en": "Why it matters:", "ja": "なぜ重要："},
-    "understand_terms": {"zh": "👉 点此了解这些专业术语（通俗解释 + 刘教授真实数据）",
-                         "en": "👉 Tap to understand these clinical terms (plain language + Prof. Liu's real data)",
-                         "ja": "👉 これらの専門用語をやさしく理解する（劉教授の実データつき）"},
+    "understand_terms": {"zh": "👉 点此了解这些专业术语（通俗解释 + 手术医生真实数据）",
+                         "en": "👉 Tap to understand these clinical terms (plain language + Surgeon's real data)",
+                         "ja": "👉 これらの専門用語をやさしく理解する（手術医師の実データつき）"},
     "cmp_h": {"zh": "人工经验 vs. AI 辅助：同一只眼，两种沟通方式",
               "en": "Manual experience vs. AI-assisted: one eye, two ways to communicate",
               "ja": "手動の経験 vs. AI支援：同じ眼、2つの伝え方"},
@@ -231,18 +231,18 @@ T: dict[str, dict[str, str]] = {
         "ja": ["記憶から「数例」を想起", "主観的印象、正確な数なし", "専門用語が多く患者に難解",
                "プライバシー検証なし", "期待は印象に基づく"]},
     "cmp_ai_pts": {
-        "zh": ["从刘教授 {N} 例中客观检索", "精确相似队列 n={n}，可复现", "术语即时转为通俗语言",
+        "zh": ["从手术医生 {N} 例中客观检索", "精确相似队列 n={n}，可复现", "术语即时转为通俗语言",
                "k≥{k} 隐私校验实时通过", "预期基于真实结果分布"],
-        "en": ["Objective search across Prof. Liu's {N} eyes", "Exact cohort n={n}, reproducible",
+        "en": ["Objective search across Surgeon's {N} eyes", "Exact cohort n={n}, reproducible",
                "Terms auto-translated to plain language", "k≥{k} privacy check verified live",
                "Expectations from real outcome distribution"],
-        "ja": ["劉教授の {N} 眼から客観的に検索", "正確なコホート n={n}、再現可能",
+        "ja": ["手術医師の {N} 眼から客観的に検索", "正確なコホート n={n}、再現可能",
                "用語を即座にやさしく変換", "k≥{k} プライバシー検証を即時通過",
                "期待は実際の結果分布に基づく"]},
-    "cmp_anchor": {"zh": "同一只眼：人工凭印象 → 本系统从刘教授 {N} 例中客观检索出 n={n} 例相似眼，并通过 k≥{k} 隐私校验。",
+    "cmp_anchor": {"zh": "同一只眼：人工凭印象 → 本系统从手术医生 {N} 例中客观检索出 n={n} 例相似眼，并通过 k≥{k} 隐私校验。",
                    "en": "Same eye: manual impression → this system objectively retrieves n={n} similar eyes "
-                         "from Prof. Liu's {N}, k≥{k} privacy-verified.",
-                   "ja": "同じ眼：手動の印象 → 本システムは劉教授の {N} 眼から n={n} 眼を客観的に抽出し、k≥{k} で検証。"},
+                         "from Surgeon's {N}, k≥{k} privacy-verified.",
+                   "ja": "同じ眼：手動の印象 → 本システムは手術医師の {N} 眼から n={n} 眼を客観的に抽出し、k≥{k} で検証。"},
     "live_badge": {"zh": "● 实时", "en": "● LIVE", "ja": "● ライブ"},
     "kanon_ok_badge": {"zh": "✓ k-匿名已校验", "en": "✓ k-anonymity verified", "ja": "✓ k-匿名性 検証済"},
     "kanon_bad_badge": {"zh": "✕ 低于 k 阈值", "en": "✕ below k-threshold", "ja": "✕ k閾値未満"},
@@ -573,7 +573,7 @@ def t(key: str) -> str:
 
 
 # ===========================================================================
-# 1. Synthetic "Prof. Liu" historical archive (stands in for de-identified data)
+# 1. Synthetic "Surgeon" historical archive (stands in for de-identified data)
 #    The signature is baked in: deeper ACD -> tends to upsize vs. the reference.
 # ===========================================================================
 LENS_SIZES = np.array([12.1, 12.6, 13.2, 13.7])
@@ -603,7 +603,7 @@ def load_history(n: int = 420, seed: int = 7) -> pd.DataFrame:
 
     ref = np.array([_reference_size(s) for s in sts])
     chosen = ref.copy()
-    # Prof. Liu's signature: deep ACD -> upsize one step in most such eyes
+    # Surgeon's signature: deep ACD -> upsize one step in most such eyes
     deep = acd >= 3.3
     upsize_roll = rng.random(n) < 0.80
     for i in range(n):
@@ -922,21 +922,21 @@ def research_topics(df: pd.DataFrame) -> list[str]:
             f"前房深度对 ICL 尺寸选择与术后拱高的影响：基于 {n} 眼的真实世界回顾",
             f"深前房眼（ACD ≥ 3.3 mm，n={len(deep)}）的个体化尺寸策略与安全性",
             "不同 STS/WTW 差值下 ICL 拱高预测模型的构建与验证",
-            "刘教授 ICL 手术拱高长期稳定性的真实世界证据（RWE）研究",
+            "手术医生 ICL 手术拱高长期稳定性的真实世界证据（RWE）研究",
         ],
         "en": [
             f"Vault distribution and predictors after ICL in high myopia (SPH ≤ −10 D, n={len(hi)})",
             f"Effect of anterior chamber depth on ICL sizing and post-op vault: a {n}-eye RWD review",
             f"Individualized sizing strategy and safety in deep-ACD eyes (ACD ≥ 3.3 mm, n={len(deep)})",
             "Building and validating a vault-prediction model across STS/WTW differences",
-            "Real-world evidence (RWE) on long-term vault stability in Prof. Liu's ICL series",
+            "Real-world evidence (RWE) on long-term vault stability in Surgeon's ICL series",
         ],
         "ja": [
             f"強度近視（SPH ≤ −10 D、n={len(hi)}）におけるICL術後ボールトの分布と規定因子",
             f"前房深度がICLサイズ選択と術後ボールトに与える影響：{n}眼のRWDレビュー",
             f"深前房眼（ACD ≥ 3.3 mm、n={len(deep)}）における個別化サイズ戦略と安全性",
             "STS/WTW差に基づくボールト予測モデルの構築と検証",
-            "劉教授のICL症例におけるボールト長期安定性のリアルワールドエビデンス（RWE）",
+            "手術医師のICL症例におけるボールト長期安定性のリアルワールドエビデンス（RWE）",
         ],
     }
     return tpl[lang]
@@ -1073,13 +1073,13 @@ GLOSSARY: dict[str, dict[str, dict[str, str]]] = {
                "why": "適切なサイズがボールトを安全域に保ちます。大きすぎると高く、小さすぎると低くなります。"}},
     "cohort": {
         "zh": {"name": "相似队列 (Cohort · “n=”)",
-               "plain": "刘教授既往病例中与你眼睛最相似的一组；“n=”就是他们的数量。",
+               "plain": "手术医生既往病例中与你眼睛最相似的一组；“n=”就是他们的数量。",
                "why": "群体越大、越相似，预期结果越可信——那是真实经验，不是猜测。"},
         "en": {"name": "Cohort (\"n=\")",
-               "plain": "The group of Prof. Liu's past patients whose eyes best match yours; \"n=\" is how many.",
+               "plain": "The group of Surgeon's past patients whose eyes best match yours; \"n=\" is how many.",
                "why": "A larger, closer group makes the outcome more trustworthy — real experience, not a guess."},
         "ja": {"name": "コホート (Cohort · 「n=」)",
-               "plain": "劉教授の過去症例のうち、あなたの眼に最も近いグループ。「n=」はその数です。",
+               "plain": "手術医師の過去症例のうち、あなたの眼に最も近いグループ。「n=」はその数です。",
                "why": "大きく近いグループほど予測は信頼でき、推測ではなく実際の経験に基づきます。"}},
     "kanon": {
         "zh": {"name": "k-匿名 (k-Anonymity)",
@@ -1095,57 +1095,57 @@ GLOSSARY: dict[str, dict[str, dict[str, str]]] = {
 }
 
 def data_anchor(key: str, df: pd.DataFrame, lang: str) -> str:
-    """A sentence grounding the term in Prof. Liu's ACTUAL cohort numbers."""
+    """A sentence grounding the term in Surgeon's ACTUAL cohort numbers."""
     N = len(df)
     if key == "acd":
         lo, hi = np.percentile(df["acd"], [10, 90])
-        return {"zh": f"刘教授 {N} 例中，前房深度多在 {lo:.1f}–{hi:.1f} mm；较深者通常安全空间更充裕。",
-                "en": f"Across Prof. Liu's {N} eyes, ACD mostly falls {lo:.1f}–{hi:.1f} mm; deeper "
+        return {"zh": f"手术医生 {N} 例中，前房深度多在 {lo:.1f}–{hi:.1f} mm；较深者通常安全空间更充裕。",
+                "en": f"Across Surgeon's {N} eyes, ACD mostly falls {lo:.1f}–{hi:.1f} mm; deeper "
                       f"chambers usually have more safety room.",
-                "ja": f"劉教授の {N} 眼では ACD は概ね {lo:.1f}–{hi:.1f} mm。深いほど安全域に余裕があります。"}[lang]
+                "ja": f"手術医師の {N} 眼では ACD は概ね {lo:.1f}–{hi:.1f} mm。深いほど安全域に余裕があります。"}[lang]
     if key == "wtw":
         lo, hi = np.percentile(df["wtw"], [10, 90])
-        return {"zh": f"刘教授病例的角膜横径多在 {lo:.1f}–{hi:.1f} mm 之间。",
-                "en": f"In Prof. Liu's records, WTW mostly ranges {lo:.1f}–{hi:.1f} mm.",
-                "ja": f"劉教授の症例では WTW は概ね {lo:.1f}–{hi:.1f} mm です。"}[lang]
+        return {"zh": f"手术医生病例的角膜横径多在 {lo:.1f}–{hi:.1f} mm 之间。",
+                "en": f"In Surgeon's records, WTW mostly ranges {lo:.1f}–{hi:.1f} mm.",
+                "ja": f"手術医師の症例では WTW は概ね {lo:.1f}–{hi:.1f} mm です。"}[lang]
     if key == "sts":
         lo, hi = np.percentile(df["sts"], [10, 90])
-        return {"zh": f"刘教授据此（多在 {lo:.1f}–{hi:.1f} mm）为每只眼选定尺寸。",
-                "en": f"Prof. Liu uses this (mostly {lo:.1f}–{hi:.1f} mm) to size each eye.",
-                "ja": f"劉教授はこの値（概ね {lo:.1f}–{hi:.1f} mm）でサイズを決めます。"}[lang]
+        return {"zh": f"手术医生据此（多在 {lo:.1f}–{hi:.1f} mm）为每只眼选定尺寸。",
+                "en": f"Surgeon uses this (mostly {lo:.1f}–{hi:.1f} mm) to size each eye.",
+                "ja": f"手術医師はこの値（概ね {lo:.1f}–{hi:.1f} mm）でサイズを決めます。"}[lang]
     if key == "sph":
         worst, best = df["sph"].min(), df["sph"].max()
-        return {"zh": f"刘教授病例覆盖约 {worst:.0f}~{best:.0f} D 的近视范围。",
-                "en": f"Prof. Liu's cases span roughly {worst:.0f} to {best:.0f} D of myopia.",
-                "ja": f"劉教授の症例は約 {worst:.0f}~{best:.0f} D の近視をカバーします。"}[lang]
+        return {"zh": f"手术医生病例覆盖约 {worst:.0f}~{best:.0f} D 的近视范围。",
+                "en": f"Surgeon's cases span roughly {worst:.0f} to {best:.0f} D of myopia.",
+                "ja": f"手術医師の症例は約 {worst:.0f}~{best:.0f} D の近視をカバーします。"}[lang]
     if key == "vault":
         med = int(df["vault"].median()); lo, hi = np.percentile(df["vault"], [25, 75])
-        return {"zh": f"刘教授病例的拱高中位约 {med} µm（多在 {lo:.0f}–{hi:.0f} µm），落在理想安全区间。",
-                "en": f"Median vault in Prof. Liu's records is ~{med} µm (mostly {lo:.0f}–{hi:.0f} µm), "
+        return {"zh": f"手术医生病例的拱高中位约 {med} µm（多在 {lo:.0f}–{hi:.0f} µm），落在理想安全区间。",
+                "en": f"Median vault in Surgeon's records is ~{med} µm (mostly {lo:.0f}–{hi:.0f} µm), "
                       f"inside the ideal safety window.",
-                "ja": f"劉教授の症例のボールト中央値は約 {med} µm（概ね {lo:.0f}–{hi:.0f} µm）で理想的な安全域内です。"}[lang]
+                "ja": f"手術医師の症例のボールト中央値は約 {med} µm（概ね {lo:.0f}–{hi:.0f} µm）で理想的な安全域内です。"}[lang]
     if key == "va":
         pct = float((df["bcva_final"] >= 1.0).mean()) * 100
-        return {"zh": f"在刘教授病例中，约 {pct:.0f}% 的眼术后达到 1.0 或更好的视力。",
-                "en": f"In Prof. Liu's records, about {pct:.0f}% of eyes reach 1.0 vision or better.",
-                "ja": f"劉教授の症例では、約 {pct:.0f}% の眼が術後 1.0 以上に達します。"}[lang]
+        return {"zh": f"在手术医生病例中，约 {pct:.0f}% 的眼术后达到 1.0 或更好的视力。",
+                "en": f"In Surgeon's records, about {pct:.0f}% of eyes reach 1.0 vision or better.",
+                "ja": f"手術医師の症例では、約 {pct:.0f}% の眼が術後 1.0 以上に達します。"}[lang]
     if key == "lens_size":
         modal = df["size"].mode().iloc[0]; share = float((df["size"] == modal).mean()) * 100
-        return {"zh": f"刘教授 {N} 例中，镜片尺寸从 12.1 到 13.7 mm 不等，最常用 {modal:g} mm（约 {share:.0f}% 的眼）。",
-                "en": f"Across Prof. Liu's {N} eyes, sizes span 12.1–13.7 mm; the most common is {modal:g} mm "
+        return {"zh": f"手术医生 {N} 例中，镜片尺寸从 12.1 到 13.7 mm 不等，最常用 {modal:g} mm（约 {share:.0f}% 的眼）。",
+                "en": f"Across Surgeon's {N} eyes, sizes span 12.1–13.7 mm; the most common is {modal:g} mm "
                       f"(about {share:.0f}% of eyes).",
-                "ja": f"劉教授の {N} 眼ではサイズは 12.1〜13.7 mm。最も多いのは {modal:g} mm（約 {share:.0f}%）です。"}[lang]
+                "ja": f"手術医師の {N} 眼ではサイズは 12.1〜13.7 mm。最も多いのは {modal:g} mm（約 {share:.0f}%）です。"}[lang]
     if key == "cohort":
-        return {"zh": f"相似队列取自刘教授 {N} 只经核验的眼；调整上方滑块时，n 会实时变化。",
-                "en": f"The cohort is drawn from Prof. Liu's {N} verified eyes; n updates live as you move the "
+        return {"zh": f"相似队列取自手术医生 {N} 只经核验的眼；调整上方滑块时，n 会实时变化。",
+                "en": f"The cohort is drawn from Surgeon's {N} verified eyes; n updates live as you move the "
                       f"sliders above.",
-                "ja": f"コホートは劉教授の {N} 眼の検証済みデータから抽出され、上のスライダー操作で n が即時に変化します。"}[lang]
+                "ja": f"コホートは手術医師の {N} 眼の検証済みデータから抽出され、上のスライダー操作で n が即時に変化します。"}[lang]
     if key == "kanon":
-        return {"zh": f"本演示的下限为 k={K_ANON}：低于此数即拒绝作答。在刘教授 {N} 例中，常见参数的眼很容易满足，"
+        return {"zh": f"本演示的下限为 k={K_ANON}：低于此数即拒绝作答。在手术医生 {N} 例中，常见参数的眼很容易满足，"
                       f"只有罕见组合才会低于门槛。",
-                "en": f"The floor here is k={K_ANON}: below it the system refuses to answer. Across Prof. Liu's "
+                "en": f"The floor here is k={K_ANON}: below it the system refuses to answer. Across Surgeon's "
                       f"{N} eyes, typical eyes clear it easily — only rare parameter combinations fall below.",
-                "ja": f"本デモの下限は k={K_ANON}：これを下回ると回答しません。劉教授の {N} 眼では一般的な眼は容易に満たし、"
+                "ja": f"本デモの下限は k={K_ANON}：これを下回ると回答しません。手術医師の {N} 眼では一般的な眼は容易に満たし、"
                       f"稀な組み合わせのみ下回ります。"}[lang]
     return ""
 
@@ -1469,7 +1469,7 @@ def render_command_center(df: pd.DataFrame) -> None:
 
 
 def main() -> None:
-    st.set_page_config(page_title="Liu's Digital Brain", page_icon="🧠", layout="wide")
+    st.set_page_config(page_title="Surgeon's Digital Brain", page_icon="🧠", layout="wide")
     st.markdown(CSS, unsafe_allow_html=True)
 
     # language switcher (sets session state before anything else renders)
