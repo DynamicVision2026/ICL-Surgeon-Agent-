@@ -32,3 +32,17 @@ Thumbs.db
 .idea/
 .vscode/
 *.swp
+
+# Node / JS
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Next.js build output
+.next/
+out/
+
+# Local env
+.env
+.env*.local
