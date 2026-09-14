@@ -7,8 +7,16 @@
 
 import type { ClauseEvaluation, EvaluateInput, Placement } from "@/lib/modules/taikyo/rules.ts";
 import type { FactRequest } from "@/lib/modules/taikyo/questions.ts";
+import type {
+  BatchEvaluation,
+  BatchEvaluateInput,
+  BatchClauseResult,
+  BatchSummary,
+  HealthTier,
+} from "@/lib/modules/taikyo/batch.ts";
 
 export type { ClauseEvaluation, EvaluateInput, FactRequest, Placement };
+export type { BatchEvaluation, BatchEvaluateInput, BatchClauseResult, BatchSummary, HealthTier };
 
 export type AnswerValue = string | number | boolean;
 
@@ -35,6 +43,32 @@ export async function evaluateClause(input: EvaluateInput, signal?: AbortSignal)
     );
   }
   return body.result as ClauseEvaluation;
+}
+
+/**
+ * Audit an entire pasted lease agreement. Posts the whole text to the batch endpoint,
+ * which segments it into clauses and scores each one. Reuses EvaluateError so callers
+ * handle failures the same way as the single-clause path.
+ */
+export async function batchEvaluateContract(
+  input: BatchEvaluateInput,
+  signal?: AbortSignal,
+): Promise<BatchEvaluation> {
+  const res = await fetch("/api/taikyo/batch-evaluate", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(input),
+    signal,
+  });
+  const body = await res.json().catch(() => null);
+  if (!res.ok) {
+    throw new EvaluateError(
+      body?.message ?? body?.error ?? `Request failed (${res.status})`,
+      res.status,
+      body?.issues,
+    );
+  }
+  return body.result as BatchEvaluation;
 }
 
 /**
